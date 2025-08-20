@@ -11,7 +11,7 @@ class UpdateMedicoRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true; // Allow all users to make this request
     }
 
     /**
@@ -22,7 +22,10 @@ class UpdateMedicoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nome' => 'sometimes|required|string|max:255',
+            'CPF' => 'sometimes|required|string|max:255',
+            'CRM' => 'sometimes|required|string|max:255',
+            'especialidade' => 'sometimes|required|string|max:255',
         ];
     }
 }

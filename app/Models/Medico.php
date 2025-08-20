@@ -9,4 +9,12 @@ class Medico extends Model
 {
     /** @use HasFactory<\Database\Factories\MedicoFactory> */
     use HasFactory;
+
+    
+    protected $fillable = [
+        'nome',
+        'CPF',
+        'CRM',
+        'especialidade',
+    ];
 }

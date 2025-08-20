@@ -15,12 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('CPF')->unique();
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('telefone');
-            $table->string('telefone_celular');
             $table->string('password');
-            $table->string('CNS');
             $table->string('status')->default('ativo');
             $table->rememberToken();
             $table->timestamps();

@@ -11,7 +11,7 @@ class StoreMedicoRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true; // Allow all users to make this request
     }
 
     /**
@@ -22,7 +22,10 @@ class StoreMedicoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nome' => 'required|string|max:255',
+            'CPF' => 'required|string|max:255',
+            'CRM' => 'required|string|max:255',
+            'especialidade' => 'required|string|max:255',
         ];
     }
 }

@@ -6,8 +6,8 @@ use App\Models\Medico;
 use App\Http\Requests\StoreMedicoRequest;
 use App\Http\Requests\UpdateMedicoRequest;
 use Illuminate\Auth\Events\Validated;
-use Illuminate\Container\Attributes\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class MedicoController extends Controller
 {
@@ -16,7 +16,7 @@ class MedicoController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Medico::all(), 200);
     }
 
     /**
@@ -32,20 +32,20 @@ class MedicoController extends Controller
      */
     public function store(StoreMedicoRequest $request)
     {
+       
         try {
-            $validated = Validated::validate($request, [
-                'nome' => 'required|string|max:255',
-                'CPF' => 'required|string|max:255',
-                'CRM' => 'required|string|max:255',
-                'especialidade' => 'required|string|max:255',
-            ]);
-            $medico = Medico::create($validated);
-            return response()->json($medico, 201);
-        } catch (\Throwable $th) {
+            // Log the validated data
 
-            Log::error($th);
-            return response()->json($th, 400);
-            
+            $medico = Medico::create($request->validated());
+
+            Log::info('Medico created successfully: ' . $medico->id);
+            return response()->json($medico, 201);
+
+        } catch (\Exception $e) {
+
+            // Log the error message
+            Log::error('Error storing Medico: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
         }
     }
 
@@ -70,7 +70,19 @@ class MedicoController extends Controller
      */
     public function update(UpdateMedicoRequest $request, Medico $medico)
     {
-        //
+        try {
+
+            $medico->update($request->validated());
+
+            Log::info('Medico updated successfully: ' . $medico->id);
+            return response()->json($medico, 200);
+
+        } catch (\Exception $e) {
+
+            // Log the error message
+            Log::error('Error updating Medico: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 
     /**
@@ -78,6 +90,17 @@ class MedicoController extends Controller
      */
     public function destroy(Medico $medico)
     {
-        //
+        try {
+            $medico->delete();
+            
+            Log::info('Medico deleted successfully: ' . $medico->id);
+            return response()->json(['message' => 'Medico deleted successfully'], 200);
+
+        } catch (\Exception $e) {
+
+            // Log the error message
+            Log::error('Error deleting Medico: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 }
