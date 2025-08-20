@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreMedicoRequest extends FormRequest
+class StorelocalAtendimentoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true; // Allow all users to make this request
+        return true;
     }
 
     /**
@@ -23,9 +23,8 @@ class StoreMedicoRequest extends FormRequest
     {
         return [
             'nome' => 'required|string|max:255',
-            'CPF' => 'required|string|max:255',
-            'CRM' => 'required|string|max:255',
-            'especialidade' => 'required|string|max:255',
+            'endereco' => 'required|string|max:255',
+            'telefone' => 'required|string|max:15', // Assuming phone numbers are stored as strings
         ];
     }
 
@@ -33,9 +32,8 @@ class StoreMedicoRequest extends FormRequest
     {
         return [
             'nome.required' => 'O campo nome é obrigatório.',
-            'CPF.required' => 'O campo CPF é obrigatório.',
-            'CRM.required' => 'O campo CRM é obrigatório.',
-            'especialidade.required' => 'O campo especialidade é obrigatório.',
+            'endereco.required' => 'O campo endereço é obrigatório.',
+            'telefone.required' => 'O campo telefone é obrigatório.',
         ];
     }
 }

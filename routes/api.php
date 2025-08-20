@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LocalAtendimentoController;
 use App\Http\Controllers\MedicoController;
 use App\Http\Middleware\JwtMiddleware;
 use Illuminate\Container\Attributes\Auth;
@@ -20,8 +21,13 @@ Route::post('/login', [AuthController::class, 'login']);
 //     return 'aaaaaaaaaaaaa';
 // });
 
+
 Route::middleware([JwtMiddleware::class])->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
 
+    
     Route::apiResource('medicos', MedicoController::class);
+    Route::apiResource('localAtendimentos', LocalAtendimentoController::class);
+
+    
 });
