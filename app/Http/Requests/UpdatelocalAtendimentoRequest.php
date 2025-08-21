@@ -22,7 +22,9 @@ class UpdatelocalAtendimentoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nome' => 'string|max:255',
+            'endereco' => 'string|max:255',
+            'telefone' => 'string|max:15'
         ];
     }
 }

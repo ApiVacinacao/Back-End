@@ -79,9 +79,9 @@ class LocalAtendimentoController extends Controller
      */
     public function update(UpdatelocalAtendimentoRequest $request, localAtendimento $localAtendimento)
     {
+        
         try{
 
-            dd($request->validated());
             $localAtendimento->update($request->validated());
 
             $idUser = Auth::id();
