@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Medico;
 use App\Http\Requests\StoreMedicoRequest;
 use App\Http\Requests\UpdateMedicoRequest;
+use Auth;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
@@ -32,6 +33,7 @@ class MedicoController extends Controller
      */
     public function store(StoreMedicoRequest $request)
     {
+        Gate::authorize('admin', [Auth::user()->role]);
        
         try {
             // Log the validated data
@@ -70,6 +72,9 @@ class MedicoController extends Controller
      */
     public function update(UpdateMedicoRequest $request, Medico $medico)
     {
+
+        Gate::authorize('admin', [Auth::user()->role]);
+
         try {
 
             $medico->update($request->validated());
@@ -90,6 +95,8 @@ class MedicoController extends Controller
      */
     public function destroy(Medico $medico)
     {
+        Gate::authorize('admin', [Auth::user()->role]);
+        
         try {
             $medico->delete();
             

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Log;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Auth;
@@ -48,7 +49,11 @@ class AuthController extends Controller
     {
         $credentials = $request->only('CPF', 'password');
 
+        //dd($credentials);
+
         try {
+
+            
             if (! $token = JWTAuth::attempt($credentials)) {
                 return response()->json(['error' => 'Invalid credentials'], 401);
             }
@@ -56,11 +61,9 @@ class AuthController extends Controller
             // Get the authenticated user.
             $user = auth()->user();
 
-            // (optional) Attach the role to the token.
-            //$token = JWTAuth::claims(['role' => $user->role])->fromUser($user);
-
             return response()->json(compact('token'));
         } catch (JWTException $e) {
+            Log::error($e->getMessage());
             return response()->json(['error' => 'Could not create token'], 500);
         }
     }

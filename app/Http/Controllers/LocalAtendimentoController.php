@@ -7,6 +7,7 @@ use App\Http\Requests\StorelocalAtendimentoRequest;
 use App\Http\Requests\UpdatelocalAtendimentoRequest;
 use App\Models\User;
 use Auth;
+use Illuminate\Support\Facades\Gate;
 use Log;
 
 class LocalAtendimentoController extends Controller
@@ -16,6 +17,8 @@ class LocalAtendimentoController extends Controller
      */
     public function index()
     {
+
+        Gate::authorize('admin', [Auth::user()->role]);
 
         $dados = localAtendimento::all();
 
@@ -39,6 +42,9 @@ class LocalAtendimentoController extends Controller
      */
     public function store(StorelocalAtendimentoRequest $request)
     {
+
+        Gate::authorize('admin', [Auth::user()->role]);
+
         try{
 
             $localAtendimento = localAtendimento::create($request->validated());
@@ -79,6 +85,8 @@ class LocalAtendimentoController extends Controller
      */
     public function update(UpdatelocalAtendimentoRequest $request, localAtendimento $localAtendimento)
     {
+
+        Gate::authorize('admin', [Auth::user()->role]);
         
         try{
 
