@@ -6,14 +6,15 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StoreMedicoRequest extends FormRequest
+
+class StoretipoConsultaRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true; // Allow all users to make this request
+        return true;
     }
 
     /**
@@ -24,20 +25,17 @@ class StoreMedicoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nome' => 'required|string|max:255',
-            'CPF' => 'required|string|max:255',
-            'CRM' => 'required|string|max:255',
-            'especialidade' => 'required|string|max:255',
+            'descricao' => 'required|string|max:255|unique:tipo_consultas,descricao',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'nome.required' => 'O campo nome é obrigatório.',
-            'CPF.required' => 'O campo CPF é obrigatório.',
-            'CRM.required' => 'O campo CRM é obrigatório.',
-            'especialidade.required' => 'O campo especialidade é obrigatório.',
+            'descricao.required' => 'A descrição é obrigatória.',
+            'descricao.string' => 'A descrição deve ser uma string.',
+            'descricao.max' => 'A descrição não pode exceder 255 caracteres.',
+            'descricao.unique' => 'A descrição já existe na base de dados.',
         ];
     }
 
@@ -49,4 +47,5 @@ class StoreMedicoRequest extends FormRequest
             'errors' => $validator->errors()
         ], 422));
     }
+
 }

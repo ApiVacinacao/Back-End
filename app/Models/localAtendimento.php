@@ -15,4 +15,9 @@ class localAtendimento extends Model
         'endereco',
         'telefone',
     ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
 }

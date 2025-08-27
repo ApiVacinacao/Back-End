@@ -5,19 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Medico extends Model
+class tipoConsulta extends Model
 {
-    /** @use HasFactory<\Database\Factories\MedicoFactory> */
+    /** @use HasFactory<\Database\Factories\TipoConsultaFactory> */
     use HasFactory;
 
-    
     protected $fillable = [
-        'nome',
-        'CPF',
-        'CRM',
-        'especialidade',
+        'descricao',
     ];
 
+    
     protected $hidden = [
         'created_at',
         'updated_at',

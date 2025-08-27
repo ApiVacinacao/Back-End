@@ -23,6 +23,8 @@ class User extends Authenticatable implements JWTSubject
         'CPF',
         'email',
         'password',
+        'status',
+        'role',
     ];
 
     /**
@@ -33,6 +35,8 @@ class User extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password',
         'remember_token',
+        'created_at',
+        'updated_at',
     ];
 
         public function getJWTIdentifier()

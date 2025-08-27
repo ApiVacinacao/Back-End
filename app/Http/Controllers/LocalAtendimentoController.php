@@ -7,6 +7,7 @@ use App\Http\Requests\StorelocalAtendimentoRequest;
 use App\Http\Requests\UpdatelocalAtendimentoRequest;
 use App\Models\User;
 use Auth;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Gate;
 use Log;
 
