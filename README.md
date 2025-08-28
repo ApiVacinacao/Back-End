@@ -27,6 +27,7 @@ composer i
 COnfigure a .env (exemplo usando o XAMPP para rodar)
 
 ``
+
 DB_CONNECTION=mysql
 
 DB_HOST=127.0.0.1
