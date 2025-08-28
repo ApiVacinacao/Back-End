@@ -30,11 +30,15 @@ COnfigure a .env (exemplo usando o XAMPP para rodar)
 
 DB_CONNECTION=mysql
 ``
+``
 DB_HOST=127.0.0.1
+``
 ``
 DB_DATABASE=[nome do banco]
 ``
+``
 DB_USERNAME=root
+``
 ``
 DB_PASSWORD=
 
