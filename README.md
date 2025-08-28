@@ -7,6 +7,7 @@ Esses sistema esta sendo desenvolvido para a instiruição do IAITEA(Instituto d
 # Tecnologias
 
 -Php/Laravel
+
 -MySql
 
 # Como rodar o projeto
@@ -24,21 +25,29 @@ composer i
 ``
 
 COnfigure a .env (exemplo usando o XAMPP para rodar)
+
 ``
 DB_CONNECTION=mysql
+
 DB_HOST=127.0.0.1
-DB_PORT=3306
+
+
 DB_DATABASE=[nome do banco]
+
 DB_USERNAME=root
+
 DB_PASSWORD=
+
 ``
 
 rode as migrations
+
 ``
 php artisan migrate
 ``
 
 começe o projeto 
+
 ``
 php artisan serve
 ``
