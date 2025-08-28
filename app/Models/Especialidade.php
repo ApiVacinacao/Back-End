@@ -16,4 +16,15 @@ class Especialidade extends Model
         'area',
         'status',
     ];
+
+        protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
+
+    public function medicos()
+    {
+        return $this->belongsTo(Medico::class);
+    }
 }

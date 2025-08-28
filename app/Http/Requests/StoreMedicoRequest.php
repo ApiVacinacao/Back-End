@@ -27,7 +27,7 @@ class StoreMedicoRequest extends FormRequest
             'nome' => 'required|string|max:255',
             'CPF' => 'required|string|max:255',
             'CRM' => 'required|string|max:255',
-            'especialidade' => 'required|string|max:255',
+            'especialidade_id' => 'required|max:255',
         ];
     }
 
@@ -37,7 +37,7 @@ class StoreMedicoRequest extends FormRequest
             'nome.required' => 'O campo nome é obrigatório.',
             'CPF.required' => 'O campo CPF é obrigatório.',
             'CRM.required' => 'O campo CRM é obrigatório.',
-            'especialidade.required' => 'O campo especialidade é obrigatório.',
+            'especialidade_id.required' => 'O campo especialidade é obrigatório.',
         ];
     }
 
