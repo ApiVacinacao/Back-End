@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EspecialidadeController;
 use App\Http\Controllers\LocalAtendimentoController;
 use App\Http\Controllers\MedicoController;
 use App\Http\Controllers\TipoConsultaController;
@@ -27,5 +28,6 @@ Route::middleware([JwtMiddleware::class])->group(function () {
     Route::apiResource('medicos', MedicoController::class);
     Route::apiResource('localAtendimentos', LocalAtendimentoController::class);
     Route::apiResource('tipoConsultas', TipoConsultaController::class);
+    Route::apiResource('especialidades', EspecialidadeController::class);
     
 });
