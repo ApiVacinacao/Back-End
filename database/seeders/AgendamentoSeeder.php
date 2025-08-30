@@ -2,19 +2,16 @@
 
 namespace Database\Seeders;
 
-use App\Models\tipoConsulta;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class TipoConsultaSeeder extends Seeder
+class AgendamentoSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        tipoConsulta::create([
-            'descricao' => 'Consulta médica geral para avaliação de saúde.',
-        ]);
+        //
     }
 }

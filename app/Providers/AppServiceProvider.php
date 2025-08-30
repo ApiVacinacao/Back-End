@@ -23,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
 
         // precisa retornar um verdade para ir para a próxima etapa
         Gate::define('admin', function ($user){
+            return $user->role === 'admin';
+        });
+
+        Gate::define('user', function ($user){
             return $user->role === 'user';
         });
     }

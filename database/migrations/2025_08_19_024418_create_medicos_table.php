@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('CPF')->unique();
             $table->string('CRM')->unique();
             $table->integer('especialidade_id')->unsigned();
-            $table->foreign('especialidade_id')->references('id')->on('especialidades'); // Chave estrangeira para a tabela especialidades
+            $table->foreign('especialidade_id')->references('id')->on('especialidades')->onDelete('cascade'); // Chave estrangeira para a tabela especialidades
             $table->timestamps();
         });
     }

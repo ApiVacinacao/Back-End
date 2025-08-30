@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AgendamentoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EspecialidadeController;
 use App\Http\Controllers\LocalAtendimentoController;
@@ -19,9 +20,6 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-
-
-
 Route::middleware([JwtMiddleware::class])->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
 
@@ -30,4 +28,6 @@ Route::middleware([JwtMiddleware::class])->group(function () {
     Route::apiResource('tipoConsultas', TipoConsultaController::class);
     Route::apiResource('especialidades', EspecialidadeController::class);
     
+    Route::apiResource('agendamentos', AgendamentoController::class)->except(['show']);
+    Route::get('meus_agendamentos', [AgendamentoController::class, 'show']);
 });
