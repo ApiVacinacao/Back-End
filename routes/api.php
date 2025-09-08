@@ -27,7 +27,7 @@ Route::middleware([JwtMiddleware::class])->group(function () {
     Route::apiResource('localAtendimentos', LocalAtendimentoController::class);
     Route::apiResource('tipoConsultas', TipoConsultaController::class);
     Route::apiResource('especialidades', EspecialidadeController::class);
-    
+
     Route::apiResource('agendamentos', AgendamentoController::class)->except(['show']);
     Route::get('meus_agendamentos', [AgendamentoController::class, 'show']);
 });

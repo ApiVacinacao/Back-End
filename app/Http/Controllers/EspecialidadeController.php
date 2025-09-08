@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Especialidade;
 use App\Http\Requests\StoreEspecialidadeRequest;
 use App\Http\Requests\UpdateEspecialidadeRequest;
-use Gate;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
 
@@ -25,8 +25,7 @@ class EspecialidadeController
                 return response()->json(['message' => 'Nenhuma especialidade encontrada.'], 404);
             }
 
-            $user = Auth()->user();
-
+            $user = auth()->user();
 
             return response()->json($dados, 200);
 
@@ -55,7 +54,7 @@ class EspecialidadeController
 
             $user = Auth()->user();
 
-            
+
             Log::info('Usuario'. $user->id .'criou a especialidade'. $especialidade->id);
 
             return response()->json($especialidade, 201);
