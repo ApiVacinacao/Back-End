@@ -33,6 +33,7 @@ class MedicoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // REQUEST 
     public function store(StoreMedicoRequest $request)
     {
         Gate::authorize('admin', [Auth::user()->role]);

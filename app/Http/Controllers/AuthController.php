@@ -21,11 +21,13 @@ class AuthController extends Controller
     public function register(Request $request)
     {
 
-        //dd($request->all());
+       // dd($request->json());
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'CPF' => 'required|string|max:255',
+            'cpf' => 'required|string|max:255',
             'password' => 'required|string|min:6|confirmed',
+            'status' => 'in:ativo,inativo',
+            'role' => 'in:user,admin',
         ]);
 
 
@@ -37,8 +39,10 @@ class AuthController extends Controller
 
         $user = User::create([
             'name' => $request->get('name'),
-            'CPF' => $request->get('CPF'),
+            'cpf' => $request->get('cpf'),
             'password' => Hash::make($request->get('password')),
+            'status' => $request->get('status') || 'ativo',
+            'role' => $request->get('role') || 'user',
         ]);
 
         $token = JWTAuth::fromUser($user);
@@ -48,7 +52,7 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->only('CPF', 'password');
+        $credentials = $request->only('cpf', 'password');
 
         //dd($credentials);
 
