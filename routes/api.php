@@ -22,7 +22,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware([JwtMiddleware::class])->group(function () {
-    Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::apiResource('medicos', MedicoController::class);
     Route::apiResource('localAtendimentos', LocalAtendimentoController::class);
@@ -34,3 +34,4 @@ Route::middleware([JwtMiddleware::class])->group(function () {
 
     Route::post('relatorios/agendamentos', [RelatorioController::class, 'relatorioAgendamento']);
 });
+
