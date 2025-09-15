@@ -5,22 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Medico extends Model
+class Especialidade extends Model
 {
+    /** @use HasFactory<\Database\Factories\EspecialidadeFactory> */
     use HasFactory;
 
     protected $fillable = [
         'nome',
-        'cpf',
-        'CRM',
-        'senha',
-        'especialidade',
+        'descricao',
+        'area',
         'status',
     ];
 
-    protected $hidden = [
-        'senha', // não expor senha
+        protected $hidden = [
         'created_at',
         'updated_at',
     ];
+
+
+    public function medicos()
+    {
+        return $this->belongsTo(Medico::class);
+    }
 }

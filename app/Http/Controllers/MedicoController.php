@@ -3,112 +3,106 @@
 namespace App\Http\Controllers;
 
 use App\Models\Medico;
+use App\Models\Especialidade;
 use App\Http\Requests\StoreMedicoRequest;
 use App\Http\Requests\UpdateMedicoRequest;
-use Auth;
-use Gate;
-use Illuminate\Auth\Events\Validated;
-use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Routing\Controller;
 
 class MedicoController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Listar todos os médicos com a especialidade
      */
     public function index()
     {
-        return response()->json(Medico::all(), 200);
+        // Retorna todos os médicos com a especialidade relacionada
+        $medicos = Medico::with('especialidade')->get();
+        return response()->json($medicos, 200);
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Criar novo médico
      */
     public function store(StoreMedicoRequest $request)
     {
         Gate::authorize('admin', [Auth::user()->role]);
-       
+
         try {
-            // Log the validated data
+            $validated = $request->validated();
+            $validated['status'] = true; // sempre ativo
 
-            $medico = Medico::create($request->validated());
+            // Pega a especialidade pelo ID
+            if (isset($validated['especialidade_id'])) {
+                $especialidade = Especialidade::find($validated['especialidade_id']);
+                if ($especialidade) {
+                    $validated['especialidade'] = $especialidade->nome; // salva o nome no médico
+                }
+            }
 
-            Log::info('Medico created successfully: ' . $medico->id);
+            $medico = Medico::create($validated);
+
+            Log::info('Médico criado: ' . $medico->id);
+
             return response()->json($medico, 201);
-
         } catch (\Exception $e) {
-
-            // Log the error message
-            Log::error('Error storing Medico: ' . $e->getMessage());
+            Log::error('Erro ao criar Médico: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }
 
     /**
-     * Display the specified resource.
+     * Exibir um médico específico
      */
     public function show(Medico $medico)
     {
-        //
+        return response()->json($medico, 200);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Medico $medico)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * Atualizar médico existente
      */
     public function update(UpdateMedicoRequest $request, Medico $medico)
     {
-
         Gate::authorize('admin', [Auth::user()->role]);
 
         try {
+            $validated = $request->validated();
+            $validated['status'] = true; // força ativo
 
-            $medico->update($request->validated());
+            // Atualiza o nome da especialidade se vier o ID
+            if (isset($validated['especialidade_id'])) {
+                $especialidade = Especialidade::find($validated['especialidade_id']);
+                if ($especialidade) {
+                    $validated['especialidade'] = $especialidade->nome;
+                }
+            }
 
-            Log::info('Medico updated successfully: ' . $medico->id);
+            $medico->update($validated);
+
+            Log::info('Médico atualizado: ' . $medico->id);
             return response()->json($medico, 200);
-
         } catch (\Exception $e) {
-
-            // Log the error message
-            Log::error('Error updating Medico: ' . $e->getMessage());
+            Log::error('Erro ao atualizar Médico: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Deletar médico
      */
     public function destroy(Medico $medico)
     {
         Gate::authorize('admin', [Auth::user()->role]);
-        
+
         try {
             $medico->delete();
-            
-            Log::info('Medico deleted successfully: ' . $medico->id);
-            return response()->json(['message' => 'Medico deleted successfully'], 200);
-
+            Log::info('Médico deletado: ' . $medico->id);
+            return response()->json(['message' => 'Médico deletado com sucesso'], 200);
         } catch (\Exception $e) {
-
-            // Log the error message
-            Log::error('Error deleting Medico: ' . $e->getMessage());
+            Log::error('Erro ao deletar Médico: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }

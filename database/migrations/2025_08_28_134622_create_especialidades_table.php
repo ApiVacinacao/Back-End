@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('especialidades', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('cpf')->unique();
-            $table->string('password');
-            $table->string('email')->unique();
-            $table->enum('status', ['ativo', 'inativo']);
-            $table->enum('role',['user','admin']);
-            $table->rememberToken();
+            $table->string('nome')->unique();
+            $table->text('descricao')->nullable();
+            $table->enum('area',["Medica", "Enfermagem", "Odontologia", "Fisioterapia", "Psicologia", "Outros"]);
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('especialidades');
     }
 };
