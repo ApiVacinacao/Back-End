@@ -42,7 +42,7 @@ class AuthController extends Controller
             'status' => $request->get('status', 'ativo') ,
             'role' => $request->get('role', 'user'),
         ]);
-
+        
         $token = JWTAuth::fromUser($user);
 
         Log::info("usuario cirado com sucesso". $user->id);
