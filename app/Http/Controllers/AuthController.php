@@ -24,6 +24,7 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'cpf' => 'required|string|max:255',
             'password' => 'required|string|min:6|confirmed',
+            'email' => 'required|string|email|max:255|unique:users',
             'status' => 'in:ativo,inativo',
             'role' => 'in:user,admin',
         ]);
@@ -37,6 +38,7 @@ class AuthController extends Controller
             'name' => $request->get('name'),
             'cpf' => $request->get('cpf'),
             'password' => Hash::make($request->get('password')),
+            'email' => $request->get('email'),
             'status' => $request->get('status', 'ativo') ,
             'role' => $request->get('role', 'user'),
         ]);

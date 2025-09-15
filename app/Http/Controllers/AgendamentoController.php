@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AgendamentoEmail;
 use App\Models\Agendamento;
 use App\Http\Requests\StoreAgendamentoRequest;
 use App\Http\Requests\UpdateAgendamentoRequest;
 use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Mail;
 
 class AgendamentoController
 {
@@ -57,6 +59,9 @@ class AgendamentoController
 
             $agendamento = Agendamento::create($request->validated());
             $user = Auth()->user();
+
+            Mail::to($user->email)->send(new AgendamentoEmail($user, $agendamento));
+
 
             Log::info("Usuário {$user->id} criou o agendamento {$agendamento->id}.");
             return response()->json($agendamento, 201);

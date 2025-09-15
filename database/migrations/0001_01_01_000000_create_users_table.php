@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('cpf')->unique();
             $table->string('password');
+            $table->string('email')->unique();
             $table->enum('status', ['ativo', 'inativo']);
             $table->enum('role',['user','admin']);
             $table->rememberToken();
