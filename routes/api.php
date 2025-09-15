@@ -6,6 +6,7 @@ use App\Http\Controllers\EspecialidadeController;
 use App\Http\Controllers\LocalAtendimentoController;
 use App\Http\Controllers\MedicoController;
 use App\Http\Controllers\RelatorioController;
+use App\Http\Controllers\test\testeEmail;
 use App\Http\Controllers\TipoConsultaController;
 use App\Http\Middleware\JwtMiddleware;
 use Illuminate\Container\Attributes\Auth;
@@ -20,6 +21,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+//Route::get('/test', [testeEmail::class, 'senEmail']);
 
 Route::middleware([JwtMiddleware::class])->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
