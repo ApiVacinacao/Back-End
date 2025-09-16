@@ -44,7 +44,8 @@ class MedicoController extends Controller
 
             $medico = Medico::create($validated);
 
-            Log::info('Médico criado: ' . $medico->id);
+            $idUSer = Auth::user();
+            Log::info('Médico criado: ' . $medico->id. "POR:" . $idUSer->id);
 
             return response()->json($medico, 201);
         } catch (\Exception $e) {
