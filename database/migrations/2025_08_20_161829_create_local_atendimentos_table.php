@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nome')->nullable(false);
             $table->string('endereco');
             $table->string('telefone');
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

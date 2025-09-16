@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tipo_consultas', function (Blueprint $table) {
             $table->id();
             $table->string('descricao');
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

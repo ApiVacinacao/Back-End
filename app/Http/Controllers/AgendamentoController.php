@@ -6,21 +6,21 @@ use App\Mail\AgendamentoEmail;
 use App\Models\Agendamento;
 use App\Http\Requests\StoreAgendamentoRequest;
 use App\Http\Requests\UpdateAgendamentoRequest;
-use Gate;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
 use Mail;
 
-class AgendamentoController
+class AgendamentoController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        Gate::authorize('admin', Agendamento::class);
+        Gate::authorize('admin');
 
-        
         try {
             $agendamentos = Agendamento::all();
             $user = Auth()->user();
@@ -49,8 +49,7 @@ class AgendamentoController
      */
     public function store(StoreAgendamentoRequest $request)
     {
-       // dd("paseii aqui");
-        Gate::authorize('admin', Agendamento::class);
+        Gate::authorize('admin');
 
         try {
             if(Agendamento::where('data', $request->data)->where('hora', $request->hora)->exists()) {
@@ -108,7 +107,7 @@ class AgendamentoController
      */
     public function destroy(Agendamento $agendamento)
     {
-        Gate::authorize('admin', Agendamento::class);
+        Gate::authorize('admin');
 
         try {
             $user = Auth()->user();

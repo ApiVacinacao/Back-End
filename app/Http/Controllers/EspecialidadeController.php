@@ -16,7 +16,7 @@ class EspecialidadeController
      */
     public function index()
     {
-        Gate::authorize('admin', Especialidade::class);
+        Gate::authorize('admin');
 
         try{
             $dados =  Especialidade::all();
@@ -27,6 +27,7 @@ class EspecialidadeController
 
             $user = auth()->user();
 
+            Log::info('O usuario '. $user->id .' buscou as especialidades' );
             return response()->json($dados, 200);
 
         } catch (\Exception $e) {
@@ -48,7 +49,7 @@ class EspecialidadeController
     public function store(StoreEspecialidadeRequest $request)
     {
 
-        Gate::authorize('admin', Especialidade::class);
+        Gate::authorize('admin');
         try{
             $especialidade = Especialidade::create($request->validated());
 
@@ -85,7 +86,7 @@ class EspecialidadeController
      */
     public function update(UpdateEspecialidadeRequest $request, Especialidade $especialidade)
     {
-        Gate::authorize('admin', Especialidade::class);
+        Gate::authorize('admin');
         try {
             $especialidade->update($request->validated());
             $user = Auth()->user();
@@ -103,7 +104,7 @@ class EspecialidadeController
      */
     public function destroy(Especialidade $especialidade)
     {
-        Gate::authorize('admin', Especialidade::class);
+        Gate::authorize('admin');
         try {
             $especialidade->delete();
             $user = Auth()->user();

@@ -28,7 +28,7 @@ class MedicoController extends Controller
      */
     public function store(StoreMedicoRequest $request)
     {
-        Gate::authorize('admin', [Auth::user()->role]);
+        Gate::authorize('admin');
 
         try {
             $validated = $request->validated();
@@ -44,8 +44,9 @@ class MedicoController extends Controller
 
             $medico = Medico::create($validated);
 
-            $idUSer = Auth::user();
-            Log::info('Médico criado: ' . $medico->id. "POR:" . $idUSer->id);
+            $user = auth()->user();
+            
+            Log::info('Médico criado: ' . $medico->id. "POR:" . $user->id);
 
             return response()->json($medico, 201);
         } catch (\Exception $e) {
@@ -67,7 +68,7 @@ class MedicoController extends Controller
      */
     public function update(UpdateMedicoRequest $request, Medico $medico)
     {
-        Gate::authorize('admin', [Auth::user()->role]);
+        Gate::authorize('admin');
 
         try {
             $validated = $request->validated();
@@ -96,7 +97,7 @@ class MedicoController extends Controller
      */
     public function destroy(Medico $medico)
     {
-        Gate::authorize('admin', [Auth::user()->role]);
+        Gate::authorize('admin');
 
         try {
             $medico->delete();

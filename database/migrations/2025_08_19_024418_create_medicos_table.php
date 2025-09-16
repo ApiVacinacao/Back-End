@@ -12,8 +12,7 @@ return new class extends Migration {
             $table->string('nome');
             $table->string('cpf')->unique();
             $table->string('CRM')->unique();
-            $table->string('senha');
-            $table->string('especialidade'); // tipo de especialidade como string
+            $table->foreignId('especialidade_id')->nullable()->constrained('especialidades'); // tipo de especialidade como string
             $table->boolean('status')->default(true); // sempre ativo
             $table->timestamps();
         });

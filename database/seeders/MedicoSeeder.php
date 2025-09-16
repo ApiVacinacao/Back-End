@@ -15,8 +15,10 @@ class MedicoSeeder extends Seeder
     {
         Medico::create([
             'nome' => 'Dr. João Silva',
-            'especialidade' => 'Cardiologia',
-            'crm' => '123456',
-            'especialidade_id' => 1]);
+            'cpf'=> "14725836945",
+            'CRM' => '123456',
+            'especialidade_id' => 1,
+            'status' => true
+        ]);
     }
 }
