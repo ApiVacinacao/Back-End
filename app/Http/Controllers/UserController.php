@@ -45,6 +45,6 @@ class UserController
             return response()->json("Sem dados para retornar");
         }
 
-       return response()->json($dados);
+        return response()->json($dados);
     }
 }
