@@ -23,4 +23,20 @@ class Agendamento extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function local_atendimento()
+    {
+        return $this->belongsTo(localAtendimento::class);
+    }
+
+    public function tipo_consulta()
+    {
+        return $this->belongsTo(tipoConsulta::class);
+    }
+
+    public function medico()
+    {
+        return $this->belongsTo(Medico::class);
+    }
+
 }
