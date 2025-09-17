@@ -50,7 +50,7 @@ class MedicoController extends Controller
      */
     public function show(Medico $medico)
     {
-        return response()->json($medico, 200);
+        //return response()->json($medico, 200);
     }
 
     /**
