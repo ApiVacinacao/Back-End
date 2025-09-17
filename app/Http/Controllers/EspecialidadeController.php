@@ -80,16 +80,7 @@ class EspecialidadeController
      */
     public function edit(Especialidade $especialidade)
     {
-        Gate::authorize('admin');
-        try {
-            $user = Auth()->user();
 
-            Log::info('Usuario'. $user->id . 'editou a especialidade'. $especialidade->id);
-
-            return response()->json($especialidade, 200);
-        } catch (\Exception $e){
-            return response()->json(['error' => 'Erro ao editar especialidade: ' . $e->getMessage()], 500);
-        }
     }
 
     /**
