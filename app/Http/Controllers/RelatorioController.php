@@ -20,7 +20,7 @@ class RelatorioController
         if($request->data_inicial && $request->data_final)
         {
 
-            $query->whereBetween('data',[$request->data_inicial, $request->data_fina]);
+            $query->whereBetween('data',[$request->data_inicial,$request->data_final]);
 
         }elseif ($request->data_inicial) {
 
