@@ -6,7 +6,7 @@ use App\Models\localAtendimento;
 use App\Http\Requests\StorelocalAtendimentoRequest;
 use App\Http\Requests\UpdatelocalAtendimentoRequest;
 use App\Models\User;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Gate;
 use Log;
@@ -19,7 +19,7 @@ class LocalAtendimentoController extends Controller
     public function index()
     {
 
-        Gate::authorize('admin', [Auth::user()->role]);
+        Gate::authorize('admin');
 
         $dados = localAtendimento::all();
 
@@ -44,15 +44,14 @@ class LocalAtendimentoController extends Controller
     public function store(StorelocalAtendimentoRequest $request)
     {
 
-        Gate::authorize('admin', [Auth::user()->role]);
+        Gate::authorize('admin');
 
         try{
 
             $localAtendimento = localAtendimento::create($request->validated());
 
             //pegar o id do usuario autenticado
-            $idUser = Auth::id(); 
-            $user = User::find($idUser);
+            $user = auth()->user();
 
             Log::info('o usuario '. $user->id .' Local de Atendimento created successfully: ' . $localAtendimento->id);
             return response()->json($localAtendimento, 201);
@@ -87,14 +86,13 @@ class LocalAtendimentoController extends Controller
     public function update(UpdatelocalAtendimentoRequest $request, localAtendimento $localAtendimento)
     {
 
-        Gate::authorize('admin', [Auth::user()->role]);
+        Gate::authorize('admin');
         
         try{
 
             $localAtendimento->update($request->validated());
 
-            $idUser = Auth::id();
-            $user = User::find($idUser);
+            $user = auth()->user();
 
             Log::info('usuraio: ' . $user->id . ' Local Atendimento updated successfully: ' . $localAtendimento->id);
             return response()->json($localAtendimento, 200);
@@ -115,8 +113,7 @@ class LocalAtendimentoController extends Controller
 
             $localAtendimento->delete();
 
-            $idUser = Auth::id();
-            $user = User::find($idUser);
+            $user = auth()->user();
 
             Log::info('usuraio: ' . $user->id . ' Local Atendimento deleted successfully: ' . $localAtendimento->id);
             return response()->json(['message' => 'Local Atendimento deleted successfully'], 200);

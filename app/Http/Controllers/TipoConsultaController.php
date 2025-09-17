@@ -19,7 +19,7 @@ class TipoConsultaController extends Controller
     public function index()
     {
 
-        //Gate::authorize('admin', [Auth::user()->role]);
+        Gate::authorize('admin');
         try{
             $dados = tipoConsulta::all();
 
@@ -47,16 +47,15 @@ class TipoConsultaController extends Controller
      */
     public function store(StoretipoConsultaRequest $request)
     {
-        //Gate::authorize('admin', [Auth::user()->role]);
+        Gate::authorize('admin');
 
         try{
 
             $tipoConsulta = tipoConsulta::create($request->validated());
 
             $idUser = Auth::id(); 
-            $user = User::find($idUser);
 
-            Log::info('o usuario '. $user->id .' Tipo de Consulta criado com :' . $tipoConsulta->id);
+            Log::info('o usuario '. $idUser .' Tipo de Consulta criado com :' . $tipoConsulta->id);
 
             return response()->json($tipoConsulta, 201);
         }catch (\Exception $e) {
@@ -86,7 +85,7 @@ class TipoConsultaController extends Controller
      */
     public function update(UpdatetipoConsultaRequest $request, tipoConsulta $tipoConsulta)
     {
-        //Gate::authorize('admin', [Auth::user()->role]);
+        Gate::authorize('admin');
 
         try {
             
@@ -94,9 +93,8 @@ class TipoConsultaController extends Controller
 
             //pegar o id do usuario autenticado
             $idUser = Auth::id(); 
-            $user = User::find($idUser); // valor em objeto
 
-            Log::info('o usuario '. $user->id .' Tipo de Consulta updated successfully: ' . $tipoConsulta->id);
+            Log::info('o usuario '. $idUser .' Tipo de Consulta updated successfully: ' . $tipoConsulta->id);
             return response()->json($tipoConsulta, 200);
         } catch (\Throwable $th) {
             Log::error('Erro ao atualizar tipo de consulta: ' . $th->getMessage());
@@ -109,15 +107,14 @@ class TipoConsultaController extends Controller
      */
     public function destroy(tipoConsulta $tipoConsulta)
     {
-        //Gate::authorize('admin', [Auth::user()->role]);
+        Gate::authorize('admin');
         try {
             $tipoConsulta->delete();
 
             //pegar o id do usuario autenticado
             $idUser = Auth::id(); 
-            $user = User::find($idUser);
 
-            Log::info('o usuario '. $user->id .' Tipo de Consulta deleted successfully: ' . $tipoConsulta->id);
+            Log::info('o usuario '. $idUser .' Tipo de Consulta deleted successfully: ' . $tipoConsulta->id);
             return response()->json(['message' => 'Tipo de consulta deletado com sucesso'], 200);
         } catch (\Throwable $th) {
             Log::error('Erro ao deletar tipo de consulta: ' . $th->getMessage());

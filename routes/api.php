@@ -8,6 +8,7 @@ use App\Http\Controllers\MedicoController;
 use App\Http\Controllers\RelatorioController;
 use App\Http\Controllers\test\testeEmail;
 use App\Http\Controllers\TipoConsultaController;
+use App\Http\Controllers\UserController;
 use App\Http\Middleware\JwtMiddleware;
 use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
@@ -31,6 +32,7 @@ Route::middleware([JwtMiddleware::class])->group(function () {
     Route::apiResource('localAtendimentos', LocalAtendimentoController::class);
     Route::apiResource('tipoConsultas', TipoConsultaController::class);
     Route::apiResource('especialidades', EspecialidadeController::class);
+    Route::apiResource('usuario', UserController::class);
 
     Route::apiResource('agendamentos', AgendamentoController::class)->except(['show']);
     Route::get('meus_agendamentos', [AgendamentoController::class, 'show']);

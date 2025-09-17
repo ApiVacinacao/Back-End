@@ -22,9 +22,4 @@ class Especialidade extends Model
         'updated_at',
     ];
 
-
-    public function medicos()
-    {
-        return $this->belongsTo(Medico::class);
-    }
 }

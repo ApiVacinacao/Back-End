@@ -15,6 +15,7 @@ class TipoConsultaSeeder extends Seeder
     {
         tipoConsulta::create([
             'descricao' => 'Consulta médica geral para avaliação de saúde.',
+            'status' => true
         ]);
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Contracts\Validation\Validator;
 
 class StoreMedicoRequest extends FormRequest
 {
@@ -17,9 +19,17 @@ class StoreMedicoRequest extends FormRequest
             'nome' => 'required|string|max:255',
             'cpf' => 'required|string|unique:medicos,cpf',
             'CRM' => 'required|string|unique:medicos,CRM',
-            'senha' => 'required|string|min:6',
-            'especialidade' => 'required|string|max:255',
+            'especialidade_id' => 'required|numeric|max:255',
             'status' => 'boolean',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'success' => false,
+            'message' => 'Erros de validação',
+            'errors' => $validator->errors()
+        ], 422));
     }
 }

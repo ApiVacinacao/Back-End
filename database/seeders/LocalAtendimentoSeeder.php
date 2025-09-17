@@ -17,6 +17,7 @@ class LocalAtendimentoSeeder extends Seeder
             'nome' => 'Clínica Central',
             'endereco' => 'Rua Principal, 123',
             'telefone' => '(11) 1234-5678',
+            'status' => true
         ]);
     }
 }

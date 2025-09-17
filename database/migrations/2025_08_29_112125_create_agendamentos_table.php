@@ -21,13 +21,16 @@ return new class extends Migration
             $table->time('hora');
 
             // Relacionamento com médicos
-            $table->foreignId('medico_id')->constrained('medicos')->onDelete('cascade');
+            $table->integer('medico_id')->unsigned();
+            $table->foreign('medico_id')->references('id')->on('medicos');
 
             // Local de atendimento (opcional)
-            $table->foreignId('local_atendimento_id')->nullable()->constrained('local_atendimentos')->onDelete('set null');
+            $table->integer('local_atendimento_id')->unsigned();
+            $table->foreign('local_atendimento_id')->references('id')->on('local_atendimentos');
 
             // Tipo de consulta (opcional)
-            $table->foreignId('tipo_consulta_id')->nullable()->constrained('tipo_consultas')->onDelete('set null');
+            $table->integer('tipo_consulta_id')->unsigned();
+            $table->foreign('tipo_consulta_id')->references('id')->on('tipo_consultas');
 
             $table->timestamps();
         });

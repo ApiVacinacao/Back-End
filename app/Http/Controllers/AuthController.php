@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use Illuminate\Support\Facades\Auth;
 
 
 
@@ -25,7 +24,7 @@ class AuthController extends Controller
             'cpf' => 'required|string|max:255',
             'password' => 'required|string|min:6|confirmed',
             'email' => 'required|string|email|max:255|unique:users',
-            'status' => 'in:ativo,inativo',
+            'status' => 'in:true,false',
             'role' => 'in:user,admin',
         ]);
 
@@ -39,7 +38,7 @@ class AuthController extends Controller
             'cpf' => $request->get('cpf'),
             'password' => Hash::make($request->get('password')),
             'email' => $request->get('email'),
-            'status' => $request->get('status', 'ativo') ,
+            'status' => $request->get('status', true) ,
             'role' => $request->get('role', 'user'),
         ]);
         
