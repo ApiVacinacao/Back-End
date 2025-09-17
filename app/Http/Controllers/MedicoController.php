@@ -20,6 +20,7 @@ class MedicoController extends Controller
     {
         // Retorna todos os médicos com a especialidade relacionada
         $medicos = Medico::with('especialidade')->get();
+
         return response()->json($medicos, 200);
     }
 
@@ -31,18 +32,7 @@ class MedicoController extends Controller
         Gate::authorize('admin');
 
         try {
-            $validated = $request->validated();
-            $validated['status'] = true; // sempre ativo
-
-            // Pega a especialidade pelo ID
-            if (isset($validated['especialidade_id'])) {
-                $especialidade = Especialidade::find($validated['especialidade_id']);
-                if ($especialidade) {
-                    $validated['especialidade'] = $especialidade->nome; // salva o nome no médico
-                }
-            }
-
-            $medico = Medico::create($validated);
+            $medico = Medico::create($request->validated());
 
             $user = auth()->user();
             
@@ -72,15 +62,6 @@ class MedicoController extends Controller
 
         try {
             $validated = $request->validated();
-            $validated['status'] = true; // força ativo
-
-            // Atualiza o nome da especialidade se vier o ID
-            if (isset($validated['especialidade_id'])) {
-                $especialidade = Especialidade::find($validated['especialidade_id']);
-                if ($especialidade) {
-                    $validated['especialidade'] = $especialidade->nome;
-                }
-            }
 
             $medico->update($validated);
 

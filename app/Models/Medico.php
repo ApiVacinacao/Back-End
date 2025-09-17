@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 
 class Medico extends Model
 {
@@ -14,19 +15,17 @@ class Medico extends Model
         'nome',
         'cpf',
         'CRM',
-        'senha',
-        'especialidade',
+        'especialidade_id',
         'status',
     ];
 
     protected $hidden = [
-        'senha', // não expor senha
         'created_at',
         'updated_at',
     ];
 
-    public function phone(): HasOne
+    public function especialidade()
     {
-        return $this->hasOne(Especialidade::class);
+        return $this->belongsTo(Especialidade::class);
     }
 }
