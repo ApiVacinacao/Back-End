@@ -47,4 +47,22 @@ class UserController
 
         return response()->json($dados);
     }
+
+    public function update(Request $request, $id){
+        
+        $user = User::find($id);
+        
+        if(!$user) {
+            return response()->json(["message" => "Usuário não encontrado"], 404);
+        }
+
+        return response()->json([
+            "message" => "Usuário atualizado com sucesso",
+            "user" =>$user
+        ]);
+    }
+
+    public function destroy(){
+        //lembrar de nao destruir o usuario logado
+    }
 }
