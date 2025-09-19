@@ -13,9 +13,9 @@ return new class extends Migration {
             $table->string('cpf')->unique();
             $table->string('CRM')->unique();
 
-            //relacionamento de tabelas, chave estrangeira 
-            $table->integer('especialidade_id')->unsigned();
-            $table->foreign('especialidade_id')->references('id')->on('especialidades');
+            // para Mysql 
+            $table->unsignedBigInteger('especialidade_id');
+            $table->foreign('especialidade_id')->references('id')->on('especialidades')->onDelete('cascade');
 
             $table->boolean('status')->default(true); // sempre ativo
             $table->timestamps();

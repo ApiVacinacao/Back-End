@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('especialidades', function (Blueprint $table) {
-            $table->id();
+            $table->id('id');
             $table->string('nome')->unique();
             $table->text('descricao')->nullable();
             $table->enum('area',["Medica", "Enfermagem", "Odontologia", "Fisioterapia", "Psicologia", "Outros"]);
