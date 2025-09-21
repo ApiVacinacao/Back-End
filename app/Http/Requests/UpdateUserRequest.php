@@ -23,8 +23,8 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'nome' => 'sometimes|required|string|max:255',
-            'cpf' => 'required|string|unique:usuarios,cpf,' . $this->user->id,
-            'email' => 'required|string|email|max:255|unique:usuarios,email,' . $this->user->id,
+            'cpf' => 'required|string|unique:users,cpf,' . $this->user->id,
+            'email' => 'required|string|email|max:255|unique:users,email,' . $this->user->id,
             'password' => 'sometimes|nullable|string|min:6',
             'status' => 'sometimes|boolean',
             'role' => 'sometimes|string|in:admin,user', 
