@@ -32,11 +32,15 @@ Route::middleware([JwtMiddleware::class])->group(function () {
     Route::apiResource('localAtendimentos', LocalAtendimentoController::class);
     Route::apiResource('tipoConsultas', TipoConsultaController::class);
     Route::apiResource('especialidades', EspecialidadeController::class);
-    Route::apiResource('usuario', UserController::class);
+
+    Route::get('/users', [UserController::class, 'index']); 
+    Route::get('/users/{user}', [UserController::class, 'show']); // Mostrar um
+    Route::put('/users/{user}', [UserController::class, 'update']); 
+    Route::delete('/users/{user}', [UserController::class, 'destroy']); 
+
 
     Route::apiResource('agendamentos', AgendamentoController::class)->except(['show']);
     Route::get('meus_agendamentos', [AgendamentoController::class, 'show']);
-
+    
     Route::post('relatorios/agendamentos', [RelatorioController::class, 'relatorioAgendamento']);
 });
-
