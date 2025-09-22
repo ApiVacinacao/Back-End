@@ -92,7 +92,22 @@ class AgendamentoController extends Controller
      */
     public function update(UpdateAgendamentoRequest $request, Agendamento $agendamento)
     {
-        //
+         Gate::authorize('admin');
+        
+        try{
+
+            $agendamento->update($request->validated());
+
+            $user = auth()->user();
+
+            Log::info('usuraio: ' . $user->id . ' Agendamento updated successfully: ' . $agendamento->id);
+            return response()->json($agendamento, 200);
+        }catch (\Exception $e) {
+            
+            // Log the error message
+            Log::error('Error updating agendamento: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 
     /**

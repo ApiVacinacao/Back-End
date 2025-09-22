@@ -11,7 +11,7 @@ class UpdateAgendamentoRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,12 @@ class UpdateAgendamentoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'data' => 'sometimes|date',
+            'hora' => 'sometimes',
+            'user_id' => 'sometimes',
+            'medico_id' => 'sometimes',
+            'tipo_consulta_id' => 'sometimes',
+            'local_atendimento_id' => 'sometimes'
         ];
     }
 }
