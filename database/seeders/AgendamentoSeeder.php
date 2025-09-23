@@ -17,6 +17,7 @@ class AgendamentoSeeder extends Seeder
             'user_id' => 1,
             'data' => '2025-09-16',
             'hora' => '08:54:00',
+            'status' => true,
             'medico_id' => 1,
             'local_atendimento_id' => 1 ,
             'tipo_consulta_id' => 1

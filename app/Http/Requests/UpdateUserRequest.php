@@ -22,7 +22,7 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nome' => 'sometimes|required|string|max:255',
+            'name' => 'sometimes|required|string|max:255',
             'cpf' => 'required|string|unique:users,cpf,' . $this->user->id,
             'email' => 'required|string|email|max:255|unique:users,email,' . $this->user->id,
             'password' => 'sometimes|nullable|string|min:6',
@@ -34,9 +34,9 @@ class UpdateUserRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'nome.required' => 'O campo nome é obrigatório quando fornecido.',
-            'nome.string' => 'O campo nome deve ser uma string.',
-            'nome.max' => 'O campo nome não deve exceder 255 caracteres.',
+            'name.required' => 'O campo nome é obrigatório quando fornecido.',
+            'name.string' => 'O campo nome deve ser uma string.',
+            'name.max' => 'O campo nome não deve exceder 255 caracteres.',
             'status.boolean' => 'O campo status deve ser verdadeiro ou falso.',
         ];
     }

@@ -22,7 +22,7 @@ class AgendamentoController extends Controller
         Gate::authorize('admin');
 
         try {
-            $agendamentos = Agendamento::with(['medico','local_atendimento','tipo_consulta'])->get();
+            $agendamentos = Agendamento::with(['medico','local_atendimento','tipo_consulta','user'])->get();
             $user = Auth()->user();
 
             if($agendamentos->isEmpty()) {
