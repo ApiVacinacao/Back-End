@@ -39,4 +39,9 @@ class Agendamento extends Model
         return $this->belongsTo(Medico::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }
