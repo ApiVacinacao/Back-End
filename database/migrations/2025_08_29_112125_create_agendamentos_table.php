@@ -19,18 +19,19 @@ return new class extends Migration
             // Data e hora do agendamento
             $table->date('data');
             $table->time('hora');
+            $table->boolean('status')->default(true);
 
-            // Relacionamento com médicos
-            $table->integer('medico_id')->unsigned();
-            $table->foreign('medico_id')->references('id')->on('medicos');
+            ##PARA Mysql
+            //relacionamento de tabelas
+            $table->foreignId('medico_id');
+            $table->foreign('medico_id')->references('id')->on('medicos')->onDelete('cascade');
 
-            // Local de atendimento (opcional)
-            $table->integer('local_atendimento_id')->unsigned();
-            $table->foreign('local_atendimento_id')->references('id')->on('local_atendimentos');
+            $table->foreignId('local_atendimento_id');
+            $table->foreign('local_atendimento_id')->references('id')->on('local_atendimentos')->onDelete('cascade');
 
-            // Tipo de consulta (opcional)
-            $table->integer('tipo_consulta_id')->unsigned();
-            $table->foreign('tipo_consulta_id')->references('id')->on('tipo_consultas');
+            $table->foreignId('tipo_consulta_id');
+            $table->foreign('tipo_consulta_id')->references('id')->on('tipo_consultas')->onDelete('cascade');
+
 
             $table->timestamps();
         });

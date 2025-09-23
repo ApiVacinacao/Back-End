@@ -24,10 +24,12 @@ class UpdateAgendamentoRequest extends FormRequest
         return [
             'data' => 'sometimes|date',
             'hora' => 'sometimes',
+            'status' => 'sometimes|boolean',
             'user_id' => 'sometimes',
             'medico_id' => 'sometimes',
             'tipo_consulta_id' => 'sometimes',
             'local_atendimento_id' => 'sometimes'
+
         ];
     }
 }

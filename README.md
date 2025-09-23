@@ -40,6 +40,8 @@ rode as migrations
 php artisan migrate
 ```
 
+php artisan db:seed
+
 começe o projeto 
 
 ```
