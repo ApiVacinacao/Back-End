@@ -6,8 +6,8 @@ use App\Models\tipoConsulta;
 use App\Http\Requests\StoretipoConsultaRequest;
 use App\Http\Requests\UpdatetipoConsultaRequest;
 use App\Models\User;
-use Auth;
-use Gate;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
 

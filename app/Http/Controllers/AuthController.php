@@ -28,18 +28,18 @@ class AuthController extends Controller
             'role' => 'in:user,admin',
         ]);
 
-
+        
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(), 400);
         }
 
         $user = User::create([
-            'name' => $request->get('name'),
-            'cpf' => $request->get('cpf'),
-            'password' => Hash::make($request->get('password')),
-            'email' => $request->get('email'),
-            'status' => $request->get('status', true) ,
-            'role' => $request->get('role', 'user'),
+            'name' => $request->name,
+            'cpf' => $request->cpf,
+            'password' => Hash::make($request->password),
+            'email' => $request->email,
+            'status' => $request->status ?? true,
+            'role' => $request->role ?? 'user',
         ]);
         
         $token = JWTAuth::fromUser($user);

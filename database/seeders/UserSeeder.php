@@ -2,12 +2,10 @@
 
 namespace Database\Seeders;
 
-use BcMath\Number;
-use DB;
-use Hash;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {

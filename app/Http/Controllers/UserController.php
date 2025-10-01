@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -53,8 +53,12 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         Gate::authorize('admin');
-    
+
         try {
+            if(Auth::id() === $user->id && !$request->status){
+                return response()->json(["voce não pode inativar o seu usario"],403);
+            }
+
             $validated = $request->validated();
             $user->update($validated);
     
