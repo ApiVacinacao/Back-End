@@ -7,125 +7,150 @@ use App\Models\Agendamento;
 use App\Http\Requests\StoreAgendamentoRequest;
 use App\Http\Requests\UpdateAgendamentoRequest;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
-use Mail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Routing\Controller;
 
 class AgendamentoController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Listar todos os agendamentos
      */
     public function index()
     {
         Gate::authorize('admin');
 
         try {
-            $agendamentos = Agendamento::with(['medico','local_atendimento','tipo_consulta'])->get();
-            $user = Auth()->user();
+            $agendamentos = Agendamento::with(['medico', 'local_atendimento', 'tipo_consulta'])->get();
 
-            if($agendamentos->isEmpty()) {
-                return response()->json(['message' => 'Nenhum agendamento encontrado.'], 404);
+            if ($agendamentos->isEmpty()) {
+                return response()->json(['message' => 'Nenhum agendamento encontrado.'], 200);
             }
 
+            $user = auth()->user();
             Log::info("Usuário {$user->id} acessou a lista de agendamentos.");
+
             return response()->json($agendamentos, 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Erro ao buscar agendamentos: ' . $e->getMessage()], 500);
+            Log::error('Erro ao buscar agendamentos: ' . $e->getMessage());
+            return response()->json(['error' => 'Erro ao buscar agendamentos.'], 500);
         }
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Criar novo agendamento
      */
     public function store(StoreAgendamentoRequest $request)
     {
         Gate::authorize('admin');
 
         try {
-            if(Agendamento::where('data', $request->data)->where('hora', $request->hora)->exists()) {
-                return response()->json(['error' => 'Já existe um agendamento para essa data e hora.'], 409);
+            $validated = $request->validated();
+
+            // Verifica se já existe agendamento na mesma data e hora
+            $exists = Agendamento::where('data', $validated['data'])
+                ->where('hora', $validated['hora'])
+                ->where('medico_id', $validated['medico_id'])
+                ->exists();
+
+            if ($exists) {
+                return response()->json(['error' => 'Já existe um agendamento para este médico, data e hora.'], 409);
             }
 
-            $agendamento = Agendamento::create($request->validated());
-            $user = Auth()->user();
+            $agendamento = Agendamento::create($validated);
 
+            $user = auth()->user();
             Mail::to($user->email)->send(new AgendamentoEmail($user, $agendamento));
 
-
             Log::info("Usuário {$user->id} criou o agendamento {$agendamento->id}.");
+
             return response()->json($agendamento, 201);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Erro ao criar agendamento: ' . $e->getMessage()], 500);
+            Log::error('Erro ao criar agendamento: ' . $e->getMessage());
+            return response()->json(['error' => 'Erro ao criar agendamento.'], 500);
+        }
+    }
+
+    // Route: PATCH /api/agendamentos/{agendamento}/toggle-status
+    public function toggleStatus(Agendamento $agendamento)
+    {
+        Gate::authorize('admin');
+
+        try {
+            $agendamento->status = !$agendamento->status;
+            $agendamento->save();
+
+            $user = auth()->user();
+            Log::info("Usuário {$user->id} alterou status do agendamento {$agendamento->id} para " . ($agendamento->status ? 'ativo' : 'inativo'));
+
+            return response()->json($agendamento, 200);
+        } catch (\Exception $e) {
+            Log::error('Erro ao alterar status do agendamento: ' . $e->getMessage());
+            return response()->json(['error' => 'Erro ao alterar status do agendamento.'], 500);
         }
     }
 
     /**
-     * Display the specified resource.
+     * Mostrar agendamentos do usuário logado
      */
-    public function show(Agendamento $agendamento)
+    public function show()
     {
-            try {
-                $user = Auth()->user();
+        try {
+            $user = auth()->user();
+            $agendamentos = Agendamento::with(['medico', 'local_atendimento', 'tipo_consulta'])
+                ->where('user_id', $user->id)
+                ->get();
 
-                $agendamento = Agendamento::where('user_id', $user->id)->get();
-
-                Log::info("Usuário {$user->id} visualizou o agendamento.");
-                return response()->json($agendamento, 200);
-            } catch (\Exception $e) {
-                return response()->json(['error' => 'Erro ao buscar agendamento: ' . $e->getMessage()], 500);
+            if ($agendamentos->isEmpty()) {
+                return response()->json(['message' => 'Nenhum agendamento encontrado.'], 200);
             }
+
+            Log::info("Usuário {$user->id} visualizou seus agendamentos.");
+            return response()->json($agendamentos, 200);
+        } catch (\Exception $e) {
+            Log::error('Erro ao buscar agendamentos do usuário: ' . $e->getMessage());
+            return response()->json(['error' => 'Erro ao buscar agendamentos.'], 500);
+        }
     }
 
-
     /**
-     * Update the specified resource in storage.
+     * Atualizar agendamento existente
      */
     public function update(UpdateAgendamentoRequest $request, Agendamento $agendamento)
     {
-         Gate::authorize('admin');
-        
-        try{
+        Gate::authorize('admin');
 
-            $agendamento->update($request->validated());
+        try {
+            $validated = $request->validated();
+
+            $agendamento->update($validated);
 
             $user = auth()->user();
+            Log::info("Usuário {$user->id} atualizou o agendamento {$agendamento->id}.");
 
-            Log::info('usuraio: ' . $user->id . ' Agendamento updated successfully: ' . $agendamento->id);
             return response()->json($agendamento, 200);
-        }catch (\Exception $e) {
-            
-            // Log the error message
-            Log::error('Error updating agendamento: ' . $e->getMessage());
-            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (\Exception $e) {
+            Log::error('Erro ao atualizar agendamento: ' . $e->getMessage());
+            return response()->json(['error' => 'Erro ao atualizar agendamento.'], 500);
         }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Deletar agendamento
      */
     public function destroy(Agendamento $agendamento)
     {
         Gate::authorize('admin');
 
         try {
-            $user = Auth()->user();
-
+            $user = auth()->user();
             $agendamento->delete();
 
             Log::info("Usuário {$user->id} deletou o agendamento {$agendamento->id}.");
             return response()->json(['message' => 'Agendamento deletado com sucesso.'], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Erro ao deletar agendamento: ' . $e->getMessage()], 500);
+            Log::error('Erro ao deletar agendamento: ' . $e->getMessage());
+            return response()->json(['error' => 'Erro ao deletar agendamento.'], 500);
         }
     }
 }

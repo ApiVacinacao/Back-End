@@ -35,8 +35,8 @@ class MedicoController extends Controller
             $medico = Medico::create($request->validated());
 
             $user = auth()->user();
-            
-            Log::info('Médico criado: ' . $medico->id. "POR:" . $user->id);
+
+            Log::info('Médico criado: ' . $medico->id . "POR:" . $user->id);
 
             return response()->json($medico, 201);
         } catch (\Exception $e) {
@@ -44,6 +44,27 @@ class MedicoController extends Controller
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }
+
+    /**
+     * Atualizar apenas o status do médico
+     */
+    public function toggleStatus(Medico $medico)
+    {
+        Gate::authorize('admin');
+
+        try {
+            // Alterna o status
+            $medico->status = !$medico->status;
+            $medico->save();
+
+            // Retorna o médico atualizado
+            return response()->json($medico, 200);
+        } catch (\Exception $e) {
+            \Log::error('Erro ao atualizar status do Médico: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+    }
+
 
     /**
      * Exibir um médico específico

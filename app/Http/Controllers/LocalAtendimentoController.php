@@ -23,7 +23,7 @@ class LocalAtendimentoController extends Controller
 
         $dados = localAtendimento::all();
 
-        if($dados->isEmpty()){
+        if ($dados->isEmpty()) {
             return response()->json(['message' => 'não foi encontrado nenhum local'], 404);
         }
 
@@ -46,23 +46,42 @@ class LocalAtendimentoController extends Controller
 
         Gate::authorize('admin');
 
-        try{
+        try {
 
             $localAtendimento = localAtendimento::create($request->validated());
 
             //pegar o id do usuario autenticado
             $user = auth()->user();
 
-            Log::info('o usuario '. $user->id .' Local de Atendimento created successfully: ' . $localAtendimento->id);
+            Log::info('o usuario ' . $user->id . ' Local de Atendimento created successfully: ' . $localAtendimento->id);
             return response()->json($localAtendimento, 201);
-
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
 
             // Log the error message
             Log::error('Error storing Local Atendimento: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }
+
+    public function toggleStatus($id)
+    {
+        Gate::authorize('admin');
+
+        $local = localAtendimento::find($id);
+
+        if (!$local) {
+            return response()->json(['error' => 'Local não encontrado'], 404);
+        }
+
+        $local->status = !$local->status;
+        $local->save();
+
+        $user = auth()->user();
+        Log::info("Usuário {$user->id} alterou status do Local Atendimento {$local->id} para " . ($local->status ? 'Ativo' : 'Inativo'));
+
+        return response()->json($local, 200);
+    }
+
 
     /**
      * Display the specified resource.
@@ -87,8 +106,8 @@ class LocalAtendimentoController extends Controller
     {
 
         Gate::authorize('admin');
-        
-        try{
+
+        try {
 
             $localAtendimento->update($request->validated());
 
@@ -96,8 +115,8 @@ class LocalAtendimentoController extends Controller
 
             Log::info('usuraio: ' . $user->id . ' Local Atendimento updated successfully: ' . $localAtendimento->id);
             return response()->json($localAtendimento, 200);
-        }catch (\Exception $e) {
-            
+        } catch (\Exception $e) {
+
             // Log the error message
             Log::error('Error updating Local Atendimento: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 400);
@@ -117,7 +136,6 @@ class LocalAtendimentoController extends Controller
 
             Log::info('usuraio: ' . $user->id . ' Local Atendimento deleted successfully: ' . $localAtendimento->id);
             return response()->json(['message' => 'Local Atendimento deleted successfully'], 200);
-
         } catch (\Exception $e) {
             Log::error('Error deleting Local Atendimento: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 400);

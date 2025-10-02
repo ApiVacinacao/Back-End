@@ -10,7 +10,7 @@ class RelatorioController
     public function relatorioAgendamento(Request $request)
     {
 
-        $query = \App\Models\Agendamento::query();
+        $query = \App\Models\Agendamento::query()->with(['user','local_atendimento', 'tipo_consulta', 'medico']);
 
         if($request->user_id)
         {
@@ -31,7 +31,6 @@ class RelatorioController
             $query->whereDate('data', $request->data_final);
         }
 
-
         if($request->medico_id)
         {
             $query->where('medico_id', $request->medico_id);
@@ -46,7 +45,6 @@ class RelatorioController
         {
             $query->where('tipo_consulta_id', $request->tipo_consulta_id);
         }
-
 
         $registro = $query->get();
         return response()->json($registro);
