@@ -64,6 +64,25 @@ class LocalAtendimentoController extends Controller
         }
     }
 
+    public function toggleStatus($id)
+    {
+        Gate::authorize('admin');
+
+        $local = localAtendimento::find($id);
+
+        if (!$local) {
+            return response()->json(['error' => 'Local não encontrado'], 404);
+        }
+
+        $local->status = !$local->status;
+        $local->save();
+
+        $user = auth()->user();
+        Log::info("Usuário {$user->id} alterou status do Local Atendimento {$local->id} para " . ($local->status ? 'Ativo' : 'Inativo'));
+
+        return response()->json($local, 200);
+    }
+
     /**
      * Display the specified resource.
      */
