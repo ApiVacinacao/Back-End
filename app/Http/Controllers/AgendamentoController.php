@@ -22,10 +22,10 @@ class AgendamentoController extends Controller
         Gate::authorize('admin');
 
         try {
-            $agendamentos = Agendamento::with(['medico','local_atendimento','tipo_consulta','user'])->get();
+            $agendamentos = Agendamento::with(['medico', 'local_atendimento', 'tipo_consulta', 'user'])->get();
             $user = Auth()->user();
 
-            if($agendamentos->isEmpty()) {
+            if ($agendamentos->isEmpty()) {
                 return response()->json(['message' => 'Nenhum agendamento encontrado.'], 404);
             }
 
@@ -52,7 +52,7 @@ class AgendamentoController extends Controller
         Gate::authorize('admin');
 
         try {
-            if(Agendamento::where('data', $request->data)->where('hora', $request->hora)->exists()) {
+            if (Agendamento::where('data', $request->data)->where('hora', $request->hora)->exists()) {
                 return response()->json(['error' => 'Já existe um agendamento para essa data e hora.'], 409);
             }
 
@@ -69,43 +69,44 @@ class AgendamentoController extends Controller
         }
     }
 
-       // Route: PATCH /api/agendamentos/{agendamento}/toggle-status
-    public function toggleStatus(Agendamento $agendamento)
+    // Route: PATCH /api/agendamentos/{agendamento}/toggle-status
+    public function toggleStatus($id)
     {
         Gate::authorize('admin');
 
-        
         try {
-            $agendamento->status = !$agendamento->status;
-            $agendamento->save();
 
-            dd($agendamento);
+            $agenda = Agendamento::find($id);
+
+            $agenda->status = !$agenda->status;
+            $agenda->save();
 
             $user = auth()->user();
-            Log::info("Usuário {$user->id} alterou status do agendamento {$agendamento->id} para " . ($agendamento->status ? 'ativo' : 'inativo'));
+            Log::info("Usuário {$user->id} alterou status do agendamento {$agenda->id} para " . ($agenda->status ? 'ativo' : 'inativo'));
 
-            return response()->json($agendamento, 200);
+            return response()->json($agenda, 200);
         } catch (\Exception $e) {
             Log::error('Erro ao alterar status do agendamento: ' . $e->getMessage());
             return response()->json(['error' => 'Erro ao alterar status do agendamento.'], 500);
         }
     }
 
+
     /**
      * Display the specified resource.
      */
     public function show(Agendamento $agendamento)
     {
-            try {
-                $user = Auth()->user();
+        try {
+            $user = Auth()->user();
 
-                $agendamento = Agendamento::where('user_id', $user->id)->get();
+            $agendamento = Agendamento::where('user_id', $user->id)->get();
 
-                Log::info("Usuário {$user->id} visualizou o agendamento.");
-                return response()->json($agendamento, 200);
-            } catch (\Exception $e) {
-                return response()->json(['error' => 'Erro ao buscar agendamento: ' . $e->getMessage()], 500);
-            }
+            Log::info("Usuário {$user->id} visualizou o agendamento.");
+            return response()->json($agendamento, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro ao buscar agendamento: ' . $e->getMessage()], 500);
+        }
     }
 
 
@@ -114,10 +115,10 @@ class AgendamentoController extends Controller
      */
     public function update(UpdateAgendamentoRequest $request, Agendamento $agendamento)
     {
-        
+
         Gate::authorize('admin');
-        
-        try{
+
+        try {
 
             $agendamento->update($request->validated());
 
@@ -125,8 +126,8 @@ class AgendamentoController extends Controller
 
             Log::info('usuraio: ' . $user->id . ' Agendamento updated successfully: ' . $agendamento->id);
             return response()->json($agendamento, 200);
-        }catch (\Exception $e) {
-            
+        } catch (\Exception $e) {
+
             // Log the error message
             Log::error('Error updating Agendamento: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 400);

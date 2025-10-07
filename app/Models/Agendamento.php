@@ -17,6 +17,7 @@ class Agendamento extends Model
         'medico_id',
         'local_atendimento_id',
         'tipo_consulta_id',
+        'status', 
     ];
 
     protected $hidden = [
@@ -43,5 +44,4 @@ class Agendamento extends Model
     {
         return $this->belongsTo(User::class);
     }
-
 }
