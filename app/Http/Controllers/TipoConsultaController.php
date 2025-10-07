@@ -64,6 +64,25 @@ class TipoConsultaController extends Controller
         }
     }
 
+
+    public function toggleStatus(tipoConsulta $tipoConsulta)
+    {
+        Gate::authorize('admin');
+
+        try {
+            $tipoConsulta->status = !$tipoConsulta->status;
+            $tipoConsulta->save();
+
+            $idUser = Auth::id();
+            Log::info('O usuário ' . $idUser . ' alterou status do Tipo de Consulta: ' . $tipoConsulta->id . ' para ' . ($tipoConsulta->status ? 'Ativo' : 'Inativo'));
+
+            return response()->json($tipoConsulta, 200);
+        } catch (\Throwable $th) {
+            Log::error('Erro ao alterar status do tipo de consulta: ' . $th->getMessage());
+            return response()->json(['message' => 'Erro ao alterar status', 'error' => $th->getMessage()], 500);
+        }
+    }
+
     /**
      * Display the specified resource.
      */
