@@ -69,6 +69,28 @@ class AgendamentoController extends Controller
         }
     }
 
+       // Route: PATCH /api/agendamentos/{agendamento}/toggle-status
+    public function toggleStatus(Agendamento $agendamento)
+    {
+        Gate::authorize('admin');
+
+        
+        try {
+            $agendamento->status = !$agendamento->status;
+            $agendamento->save();
+
+            dd($agendamento);
+
+            $user = auth()->user();
+            Log::info("Usuário {$user->id} alterou status do agendamento {$agendamento->id} para " . ($agendamento->status ? 'ativo' : 'inativo'));
+
+            return response()->json($agendamento, 200);
+        } catch (\Exception $e) {
+            Log::error('Erro ao alterar status do agendamento: ' . $e->getMessage());
+            return response()->json(['error' => 'Erro ao alterar status do agendamento.'], 500);
+        }
+    }
+
     /**
      * Display the specified resource.
      */

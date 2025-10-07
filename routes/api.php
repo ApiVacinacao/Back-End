@@ -38,6 +38,11 @@ Route::middleware([JwtMiddleware::class])->group(function () {
     Route::put('/users/{user}', [UserController::class, 'update']); 
     Route::delete('/users/{user}', [UserController::class, 'destroy']); 
 
+    // rotas para alteração
+    Route::patch('/medicos/{medico}/status', [MedicoController::class, 'toggleStatus']);
+    Route::patch('localAtendimentos/{id}/toggle-status', [LocalAtendimentoController::class, 'toggleStatus']);
+    Route::patch('tipoConsultas/{tipoConsulta}/toggle-status', [TipoConsultaController::class, 'toggleStatus']);
+    Route::patch('agendamentos/{id}/toggle-status', [AgendamentoController::class, 'toggleStatus']);
 
     Route::apiResource('agendamentos', AgendamentoController::class)->except(['show']);
     Route::get('meus_agendamentos', [AgendamentoController::class, 'show']);

@@ -6,8 +6,8 @@ use App\Models\tipoConsulta;
 use App\Http\Requests\StoretipoConsultaRequest;
 use App\Http\Requests\UpdatetipoConsultaRequest;
 use App\Models\User;
-use Auth;
-use Gate;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
 
@@ -61,6 +61,25 @@ class TipoConsultaController extends Controller
         }catch (\Exception $e) {
             Log::error('Erro ao criar tipo de consulta: ' . $e->getMessage());
             return response()->json(['message' => 'Erro ao criar tipo de consulta', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+
+    public function toggleStatus(tipoConsulta $tipoConsulta)
+    {
+        Gate::authorize('admin');
+
+        try {
+            $tipoConsulta->status = !$tipoConsulta->status;
+            $tipoConsulta->save();
+
+            $idUser = Auth::id();
+            Log::info('O usuário ' . $idUser . ' alterou status do Tipo de Consulta: ' . $tipoConsulta->id . ' para ' . ($tipoConsulta->status ? 'Ativo' : 'Inativo'));
+
+            return response()->json($tipoConsulta, 200);
+        } catch (\Throwable $th) {
+            Log::error('Erro ao alterar status do tipo de consulta: ' . $th->getMessage());
+            return response()->json(['message' => 'Erro ao alterar status', 'error' => $th->getMessage()], 500);
         }
     }
 
