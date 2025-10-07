@@ -25,8 +25,8 @@ class UserController extends Controller
                 return response()->json(['message' => 'Nenhum usuário encontrado'], 404);
             }
     
-            $user = auth()->user();
-            Log::info("O usuário {$user->id} listou todos os cadastros");
+            //$user = auth()->user();
+            //Log::info("O usuário {$user->id} listou todos os cadastros");
     
             return response()->json($dados, 200);
         } catch (Exception $e) {
@@ -62,7 +62,7 @@ class UserController extends Controller
             $validated = $request->validated();
             $user->update($validated);
     
-            Log::info("Usuário atualizado: {$user->id} por " . auth()->user()->id);
+            //Log::info("Usuário atualizado: {$user->id} por " . auth()->user()->id);
     
             return response()->json($user, 200);
         } catch (Exception $e) {
@@ -82,7 +82,7 @@ class UserController extends Controller
         try {
             $user->delete();
     
-            Log::info("Usuário deletado: {$user->id} por " . auth()->user()->id);
+            //Log::info("Usuário deletado: {$user->id} por " . auth()->user()->id);
     
             return response()->json(['message' => 'Usuário deletado com sucesso'], 200);
         } catch (Exception $e) {
