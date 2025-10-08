@@ -41,8 +41,8 @@ class StorelocalAtendimentoRequest extends FormRequest
             'endereco.min' => 'deve ter entre 5 a 100 carateres',
             'endereco.max' => 'deve ter entre 5 a 100 carateres',
             'telefone.required' => 'O campo telefone é obrigatório.',
-            'telefone.min' => 'deve ter entre 11 há 12 numeros',
-            'telefone.max' => 'deve ter entre 11 há 12 numeros',
+            'telefone.min' => 'deve ter entre 10 há 12 numeros',
+            'telefone.max' => 'deve ter entre 10 há 12 numeros',
         ];
     }
 
