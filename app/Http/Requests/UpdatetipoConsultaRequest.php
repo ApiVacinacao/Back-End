@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
+
 
 class UpdatetipoConsultaRequest extends FormRequest
 {
@@ -22,7 +25,26 @@ class UpdatetipoConsultaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'descricao' => 'sometimes|required|string|max:255,' 
+            'descricao' => 'sometimes|string|min:5|max:50|unique:tipo_consultas' 
         ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'descricao.string' => 'A descrição deve ser uma string.',
+            'descricao.max' => 'A descrição não pode exceder 50 caracteres.',
+            'descricao.min'=> 'A descrição não pode ter a baixo de 5 caracteres',
+            'descricao.unique' => 'A descrição já existe na base de dados.',
+        ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'success' => false,
+            'message' => 'Erros de validação',
+            'errors' => $validator->errors()
+        ], 422));
     }
 }
