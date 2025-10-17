@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUsuerRequest;
 use Illuminate\Http\Request;
 
 use App\Models\User;
@@ -17,35 +18,20 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class AuthController extends Controller
 {
     // User registration
-    public function register(Request $request)
+    public function register(StoreUsuerRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'cpf' => 'required|string|max:255',
-            'password' => 'required|string|min:6|confirmed',
-            'email' => 'required|string|email|max:255|unique:users',
-            'status' => 'sometimes|boolean',
-            'role' => 'in:user,admin',
-        ]);
-
+        try {
+            $user = User::create($request->validated());
         
-        if($validator->fails()){
-            return response()->json($validator->errors()->toJson(), 400);
+            $token = JWTAuth::fromUser($user);
+
+            Log::info("usuario cirado com sucesso". $user->id);
+            return response()->json(compact('user','token'), 201);
+        } catch (\Throwable $th) {
+            Log::error('Erro ao registrar usuario: '. $th->getMessage());
+            return response()->json(['error' => 'Erro ao registrar usuario'], 500);
         }
-
-        $user = User::create([
-            'name' => $request->name,
-            'cpf' => $request->cpf,
-            'password' => Hash::make($request->password),
-            'email' => $request->email,
-            'status' => $request->status ?? true,
-            'role' => $request->role ?? 'user',
-        ]);
         
-        $token = JWTAuth::fromUser($user);
-
-        Log::info("usuario cirado com sucesso". $user->id);
-        return response()->json(compact('user','token'), 201);
     }
 
     public function login(Request $request)
