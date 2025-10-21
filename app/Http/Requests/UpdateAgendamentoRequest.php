@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\DataValida;
+use App\Rules\TimeValidate;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -25,8 +27,8 @@ class UpdateAgendamentoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'data' => 'sometimes|date',
-            'hora' => 'sometimes',
+            'data' => ['sometimes','date',new DataValida],
+            'hora' => ['sometimes', new TimeValidate],
             'user_id' => 'sometimes|exists:users,id',
             'medico_id' => 'sometimes|exists:medicos,id',
             'tipo_consulta_id' => 'sometimes|exists:tipo_consultas,id',

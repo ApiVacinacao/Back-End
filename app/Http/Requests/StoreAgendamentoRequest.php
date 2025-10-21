@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\DataValida;
+use App\Rules\TimeValidate;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -24,8 +26,8 @@ class StoreAgendamentoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'data' => 'required|date',
-            'hora' => 'required',
+            'data' => ['required','date',new DataValida],
+            'hora' => ['required', new TimeValidate],
             'user_id' => 'required|exists:users,id',
             'medico_id' => 'required|exists:medicos,id',
             'tipo_consulta_id' => 'required|exists:tipo_consultas,id',
