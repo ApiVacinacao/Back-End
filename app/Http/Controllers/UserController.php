@@ -25,8 +25,8 @@ class UserController extends Controller
                 return response()->json(['message' => 'Nenhum usuário encontrado'], 404);
             }
     
-            //$user = auth()->user();
-            //Log::info("O usuário {$user->id} listou todos os cadastros");
+            $user = auth()->user();
+            Log::info("O usuário {$user->id} listou todos os cadastros");
     
             return response()->json($dados, 200);
         } catch (Exception $e) {
@@ -47,7 +47,7 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        //return response()->json($user, 200);
+        return response()->json($user, 200);
     }
 
     public function update(UpdateUserRequest $request, User $user)
