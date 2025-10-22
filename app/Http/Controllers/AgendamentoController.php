@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\SMS\BulkSmsController;
 use App\Mail\AgendamentoEmail;
+
+use Illuminate\Support\Facades\Mail;
 use App\Models\Agendamento;
 use App\Http\Requests\StoreAgendamentoRequest;
 use App\Http\Requests\UpdateAgendamentoRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Log;
-use Mail;
+use Illuminate\Support\Facades\Mail as FacadesMail;
 
 class AgendamentoController extends Controller
 {
@@ -59,8 +63,9 @@ class AgendamentoController extends Controller
             $agendamento = Agendamento::create($request->validated());
             $user = Auth()->user();
 
-            Mail::to($user->email)->send(new AgendamentoEmail($user, $agendamento));
-
+            //envio de mensagem
+            //Mail::to($user->email)->send(new AgendamentoEmail($user, $agendamento));
+            $SmsEnvio = new BulkSmsController($user->telefone, "só pra testar");
 
             Log::info("Usuário {$user->id} criou o agendamento {$agendamento->id}.");
             return response()->json($agendamento, 201);
