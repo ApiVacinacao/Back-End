@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Models\Agendamento;
 use App\Http\Requests\StoreAgendamentoRequest;
 use App\Http\Requests\UpdateAgendamentoRequest;
+use App\Services\BulkSmsService;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -18,6 +19,14 @@ use Illuminate\Support\Facades\Mail as FacadesMail;
 
 class AgendamentoController extends Controller
 {
+
+    protected $smsService;
+
+    public function __construct(BulkSmsService $smsService)
+    {
+        $this->smsService = $smsService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -63,10 +72,13 @@ class AgendamentoController extends Controller
             $agendamento = Agendamento::create($request->validated());
             $user = Auth()->user();
 
+
+            $telefone = $user->telefone;
+
             //envio de mensagem
             //Mail::to($user->email)->send(new AgendamentoEmail($user, $agendamento));
-            $SmsEnvio = new BulkSmsController($user->telefone, "só pra testar");
-
+            $this->smsService->send($telefone, "vamos na fé");
+        
             Log::info("Usuário {$user->id} criou o agendamento {$agendamento->id}.");
             return response()->json($agendamento, 201);
         } catch (\Exception $e) {

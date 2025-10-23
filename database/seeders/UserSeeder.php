@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
             'cpf' => "11122233347",
             'password' => Hash::make('password'),
             'email' => 'lagado75@gmail.com',
-            'telefone' => '44988604603',
+            'telefone' => '+5544988276521',
             'status' => true,
             'role' => 'admin'
         ]);
