@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UpdateEspecialidadeRequest extends FormRequest
 {
@@ -22,9 +24,9 @@ class UpdateEspecialidadeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nome' => 'sometimes|required|string|max:255',
-            'descricao' => 'nullable|string',
-            'area' => 'sometimes|required|string|max:255',
+            'nome' => 'sometimes|string|min:10|max:90|unique:especialidades',
+            'descricao' => 'sometimes|string|min:5|max:250',
+            'area' => 'sometimes|string|',
             'status' => 'sometimes|boolean',
         ];
     }
@@ -32,14 +34,24 @@ class UpdateEspecialidadeRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'nome.required' => 'O campo nome é obrigatório quando fornecido.',
-            'nome.string' => 'O campo nome deve ser uma string.',
-            'nome.max' => 'O campo nome não deve exceder 255 caracteres.',
-            'descricao.string' => 'O campo descrição deve ser uma string.',
-            'area.required' => 'O campo área é obrigatório quando fornecido.',
-            'area.string' => 'O campo área deve ser uma string.',
-            'area.max' => 'O campo área não deve exceder 255 caracteres.',
-            'status.boolean' => 'O campo status deve ser verdadeiro ou falso.',
+            'nome.string'=> 'O campo nome deve ser uma string.',
+            'nome.min'=> 'O campo nome deve ter no mínimo 10 caracteres.',
+            'nome.max'=> 'O campo nome deve ter no máximo 90 caracteres.',
+            'nome.unique'=> 'Este nome já está cadastrado. Escolha outro.',
+            'descricao.string'=> 'O campo descrição deve ser uma string.',
+            'descricao.min'=> 'O campo descrição deve ter no mínimo 5 caracteres.',
+            'descricao.max'=> 'O campo descrição deve ter no máximo 250 caracteres.',
+            'area.string'=> 'O campo área deve ser uma string.',
+            'status.boolean'=> 'O campo status deve ser verdadeiro ou falso (booleano).',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'success' => false,
+            'message' => 'Erros de validação',
+            'errors' => $validator->errors()
+        ], 422));
     }
 }

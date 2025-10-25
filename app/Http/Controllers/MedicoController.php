@@ -45,6 +45,23 @@ class MedicoController extends Controller
         }
     }
 
+    public function toggleStatus(Medico $medico)
+    {
+        Gate::authorize('admin');
+
+        try {
+            // Alterna o status
+            $medico->status = !$medico->status;
+            $medico->save();
+
+            // Retorna o médico atualizado
+            return response()->json($medico, 200);
+        } catch (\Exception $e) {
+            \Log::error('Erro ao atualizar status do Médico: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+    }
+
     /**
      * Atualizar apenas o status do médico
      */

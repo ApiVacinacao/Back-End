@@ -19,6 +19,7 @@ return new class extends Migration
             // Data e hora do agendamento
             $table->date('data');
             $table->time('hora');
+            $table->boolean('status')->default(true);
 
             ##PARA Mysql
             //relacionamento de tabelas

@@ -36,11 +36,16 @@ Route::middleware([JwtMiddleware::class])->group(function () {
     Route::patch('tipoConsultas/{tipoConsulta}/toggle-status', [TipoConsultaController::class, 'toggleStatus']);
     Route::apiResource('especialidades', EspecialidadeController::class);
 
-    Route::get('/users', [UserController::class, 'index']);
-    Route::get('/users/{user}', [UserController::class, 'show']); // Mostrar um
-    Route::put('/users/{user}', [UserController::class, 'update']);
-    Route::delete('/users/{user}', [UserController::class, 'destroy']);
+    Route::get('/users', [UserController::class, 'index']); 
+    Route::get('/users/{user}', [UserController::class, 'show']);
+    Route::put('/users/{user}', [UserController::class, 'update']); 
+    Route::delete('/users/{user}', [UserController::class, 'destroy']); 
 
+    // rotas para alteração
+    Route::patch('/medicos/{medico}/status', [MedicoController::class, 'toggleStatus']);
+    Route::patch('localAtendimentos/{id}/toggle-status', [LocalAtendimentoController::class, 'toggleStatus']);
+    Route::patch('tipoConsultas/{tipoConsulta}/toggle-status', [TipoConsultaController::class, 'toggleStatus']);
+    Route::patch('agendamentos/{id}/toggle-status', [AgendamentoController::class, 'toggleStatus']);
 
     Route::apiResource('agendamentos', AgendamentoController::class)->except(['show']);
     Route::patch('agendamentos/{id}/toggle-status', [AgendamentoController::class, 'toggleStatus']);
