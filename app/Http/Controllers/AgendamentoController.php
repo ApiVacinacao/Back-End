@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Routing\Controller;
+use Spatie\GoogleCalendar\Event;
+use Carbon\Carbon;
 
 class AgendamentoController extends Controller
 {
@@ -62,6 +64,19 @@ class AgendamentoController extends Controller
             $user = auth()->user();
             Mail::to($user->email)->send(new AgendamentoEmail($user, $agendamento));
 
+            $start = Carbon::parse("{$agendamento->data} {$agendamento->hora}");
+            $end = $start->copy()->addMinutes(30); // define 30min de duração, pode ajustar
+            
+            $googleEvent = new Event;
+            $googleEvent->name = "Consulta com Dr(a). {$agendamento->medico->nome}";
+            $googleEvent->description = "Tipo: {$agendamento->tipo_consulta->nome}\nLocal: {$agendamento->local_atendimento->nome}";
+            $googleEvent->startDateTime = $start;
+            $googleEvent->endDateTime = $end;
+            $googleEvent->save();
+            
+            // Armazenar o ID do evento no agendamento (adicione coluna `google_event_id` na tabela)
+            $agendamento->update(['google_event_id' => $googleEvent->id]);
+            
             Log::info("Usuário {$user->id} criou o agendamento {$agendamento->id}.");
 
             return response()->json($agendamento, 201);
@@ -125,6 +140,21 @@ class AgendamentoController extends Controller
 
             $agendamento->update($validated);
 
+            //Atualizar evento no Google Calendar
+            if ($agendamento->google_event_id) {
+                $event = Event::find($agendamento->google_event_id);
+                if ($event) {
+                    $start = Carbon::parse("{$agendamento->data} {$agendamento->hora}");
+                    $end = $start->copy()->addMinutes(30);
+
+                    $event->name = "Consulta com Dr(a). {$agendamento->medico->nome}";
+                    $event->description = "Tipo: {$agendamento->tipo_consulta->nome}\nLocal: {$agendamento->local_atendimento->nome}";
+                    $event->startDateTime = $start;
+                    $event->endDateTime = $end;
+                    $event->save();
+                }
+            }
+            
             $user = auth()->user();
             Log::info("Usuário {$user->id} atualizou o agendamento {$agendamento->id}.");
 
@@ -143,8 +173,17 @@ class AgendamentoController extends Controller
         Gate::authorize('admin');
 
         try {
-            $user = auth()->user();
+            // Remover evento do Google Calendar
+            if ($agendamento->google_event_id) {
+                $event = Event::find($agendamento->google_event_id);
+                if ($event) {
+                    $event->delete();
+                }
+            }
+            
             $agendamento->delete();
+            $user = auth()->user();
+        
 
             Log::info("Usuário {$user->id} deletou o agendamento {$agendamento->id}.");
             return response()->json(['message' => 'Agendamento deletado com sucesso.'], 200);
