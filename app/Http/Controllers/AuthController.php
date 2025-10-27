@@ -6,7 +6,9 @@ use App\Http\Requests\StoreUsuerRequest;
 use Illuminate\Http\Request;
 
 use App\Models\User;
+use App\Services\BulkSmsService;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
@@ -17,11 +19,23 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
+    protected $caracteres = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%¨&*()_+';
+    protected $smsService;
+
+    public function __construct(BulkSmsService $smsService)
+    {
+        $this->smsService = $smsService;
+    }
+    
     // User registration
     public function register(StoreUsuerRequest $request)
     {
         try {
-            $user = User::create($request->validated());
+            $request->validated();
+
+            $request["telefone"] = "+" . $request["telefone"];
+
+            $user = User::create($request->all());
         
             $token = JWTAuth::fromUser($user);
 
@@ -60,5 +74,34 @@ class AuthController extends Controller
         JWTAuth::invalidate(JWTAuth::getToken());
 
         return response()->json(['message' => 'Successfully logged out']);
+    }
+
+    public function esqueciaSenha(Request $request){
+
+        try {
+            $request->validate([
+            'cpf' => 'exists:users,cpf',
+            ],[
+                'cpf.exists' => 'não foi encontrado nenhum CPF válido no sistema'
+            ]);
+
+            $user = DB::table('users')->where('cpf', '=', $request->get('cpf'))->first();
+
+            dd($user->telefone);
+
+            if (!empty($user)){
+                $randomString = substr(str_shuffle($this->caracteres), 10, 15);
+                $this->smsService->send($user->telefone, $user->name . " sua senha foi alterada para " . $randomString);
+
+                Hash::make($randomString);
+                $user->update(['password'=> $randomString]);
+            }
+
+            return response()->json(['message'=> 'usuario não encontrado'], 404);
+        } catch (\Throwable $th) {
+            Log::error("erro não esperado no esqueciaSenha: ".$th->getMessage());
+            return response()->json(['error'=> 'erro legal'. $th], 500);
+        }
+        
     }
 }

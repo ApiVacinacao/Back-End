@@ -29,6 +29,7 @@ class StoreUsuerRequest extends FormRequest
             // no regex
             // (?=.*[\W_]) = exige pelo menos um caractere especial
             // (?=.*\d) = exige pelo menos um dígito
+            'telefone' => 'required|string|min:11|max:14',
             'password' => 'required|string|min:8|max:25|regex:/^(?=.*[\W_])(?=.*\d).+$/|confirmed',
             'email' => 'required|email|unique:users',
             'status' => 'sometimes|boolean',
@@ -48,7 +49,12 @@ class StoreUsuerRequest extends FormRequest
             'cpf.required' => 'O campo CPF é obrigatório.', #ok
             'cpf.min' => 'O CPF informado não é válido.', #ok
             'cpf.max' => 'O CPF informado não é válido.', #ok
-            'cpf.unique' => 'Este CPF já está cadastrado.', # ok
+            'cpf.unique' => 'Este CPF já está cadastrado.', # ok,
+
+            'telefone.required' => 'O campo telefone é obrigatorio',
+            'telefone.min' => 'O telefone deve ter no minimo 11 caracteres',
+            'telefone.max' => 'O telefone deve ter no maximo 14 caracteres',
+            'telefone.string' => 'O campo precisa ser em string',
 
             'password.required' => 'O campo senha é obrigatório.', #ok
             'password.string' => 'O campo senha deve ser uma string.', #ok

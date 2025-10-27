@@ -29,6 +29,7 @@ class UpdateUserRequest extends FormRequest
             // no regex
             // (?=.*[\W_]) = exige pelo menos um caractere especial
             // (?=.*\d) = exige pelo menos um dígito
+            'telefone' => 'sometimes|string|min:11|max:14',
             'password' => 'sometimes|string|min:8|max:25|regex:/^(?=.*[\W_])(?=.*\d).+$/|confirmed',
             'email' => 'sometimes|email|unique:users',
             'status' => 'sometimes|boolean',
@@ -47,6 +48,10 @@ class UpdateUserRequest extends FormRequest
             'cpf.min' => 'O CPF informado não é válido.', #ok
             'cpf.max' => 'O CPF informado não é válido.', #ok
             'cpf.unique' => 'Este CPF já está cadastrado.', # ok
+
+            'telefone.min' => 'O telefone deve ter no minimo 11 caracteres',
+            'telefone.max' => 'O telefone deve ter no maximo 14 caracteres',
+            'telefone.string' => 'O campo precisa ser em string',
 
             'password.string' => 'O campo senha deve ser uma string.', #ok
             'password.min' => 'A senha deve ter no mínimo 8 caracteres.', #ok

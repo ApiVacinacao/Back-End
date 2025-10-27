@@ -20,12 +20,7 @@ use Illuminate\Support\Facades\Mail as FacadesMail;
 class AgendamentoController extends Controller
 {
 
-    protected $smsService;
 
-    public function __construct(BulkSmsService $smsService)
-    {
-        $this->smsService = $smsService;
-    }
 
     /**
      * Display a listing of the resource.
@@ -73,11 +68,9 @@ class AgendamentoController extends Controller
             $user = Auth()->user();
 
 
-            $telefone = $user->telefone;
-
             //envio de mensagem
             //Mail::to($user->email)->send(new AgendamentoEmail($user, $agendamento));
-            $this->smsService->send($telefone, "vamos na fé");
+            
         
             Log::info("Usuário {$user->id} criou o agendamento {$agendamento->id}.");
             return response()->json($agendamento, 201);
