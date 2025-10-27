@@ -79,26 +79,38 @@ class AuthController extends Controller
     public function esqueciaSenha(Request $request){
 
         try {
+
+            // validando se o CPF ja esta ccadastrado no sistema
             $request->validate([
             'cpf' => 'exists:users,cpf',
             ],[
                 'cpf.exists' => 'não foi encontrado nenhum CPF válido no sistema'
             ]);
+            // procutrando o CPF no banco 
+            $user = $user = User::where('cpf', $request->cpf)->first();
 
-            $user = DB::table('users')->where('cpf', '=', $request->get('cpf'))->first();
-
-            dd($user->telefone);
-
-            if (!empty($user)){
+            // se a variavel $user  for diferente de vazio 
+            if ($user){
+                // gerando uma senha aleatorio
                 $randomString = substr(str_shuffle($this->caracteres), 10, 15);
-                $this->smsService->send($user->telefone, $user->name . " sua senha foi alterada para " . $randomString);
 
-                Hash::make($randomString);
-                $user->update(['password'=> $randomString]);
+                $this->smsService->send($user->telefone, "Sua senha foi alterada para: {$randomString}");
+
+                //criptografando a senha
+                $hashedPassword = Hash::make($randomString);
+                // update do da senha do usuario
+                $user->update([
+                    'password' => $hashedPassword
+                ]);
+
+                //retornando um sucesso para o front
+                return response()->json(['message'=> 'Senha alterada com sucesso'], 200);
             }
 
-            return response()->json(['message'=> 'usuario não encontrado'], 404);
+            return response()->json(['message'=> 'Não foi encon trado o usuario'], 400);
+
         } catch (\Throwable $th) {
+
             Log::error("erro não esperado no esqueciaSenha: ".$th->getMessage());
             return response()->json(['error'=> 'erro legal'. $th], 500);
         }

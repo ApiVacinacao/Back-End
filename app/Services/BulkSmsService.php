@@ -43,6 +43,8 @@ class BulkSmsService
                     ]
                 );
                 $count++;
+
+                Log::info('mensagem enviada com sucesso'. $number .' = '. $count);
             } catch (\Throwable $th) {
                 Log::error("Erro ao enviar SMS para {$number}: " . $th->getMessage());
             }

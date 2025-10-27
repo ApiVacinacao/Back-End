@@ -69,8 +69,7 @@ class AgendamentoController extends Controller
 
 
             //envio de mensagem
-            //Mail::to($user->email)->send(new AgendamentoEmail($user, $agendamento));
-            
+            Mail::to($user->email)->send(new AgendamentoEmail($user, $agendamento));
         
             Log::info("Usuário {$user->id} criou o agendamento {$agendamento->id}.");
             return response()->json($agendamento, 201);
