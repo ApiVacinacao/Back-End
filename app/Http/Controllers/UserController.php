@@ -10,9 +10,27 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
+use OpenApi\Annotations as OA;
 
 class UserController extends Controller
 {
+
+    /**
+     * @OA\Get(
+     *     path="/api/users",
+     *     summary="Lista todos os usuários",
+     *     tags={"Users"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Operação bem-sucedida"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Requisição inválida"
+     *     )
+     * )
+     */
 
     public function index()
     {

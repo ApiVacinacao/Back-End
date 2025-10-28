@@ -16,6 +16,22 @@ class TipoConsultaController extends Controller
     /**
      * Display a listing of the resource.
      */
+        /**
+     * @OA\Get(
+     *     path="/api/tipoConsultas",
+     *     summary="Lista todos os Tipos de consulta",
+     *     tags={"Tipo de Consultas"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Operação bem-sucedida"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Requisição inválida"
+     *     )
+     * )
+     */
     public function index()
     {
 
@@ -43,7 +59,27 @@ class TipoConsultaController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/tipoConsultas",
+     *     summary="Cria um novo Tipo de Consulta",
+     *     tags={"Tipo de Consultas"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"descricao"},
+     *             @OA\Property(property="descricao", type="string", example="Consulta Geral"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Usuário criado com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Dados inválidos"
+     *     )
+     * )
      */
     public function store(StoretipoConsultaRequest $request)
     {
@@ -122,7 +158,27 @@ class TipoConsultaController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/tipoConsultas/{id}",
+     *     summary="Remove um usuário pelo ID",
+     *     tags={"Tipo de Consultas"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID do usuário",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Tipo de consutla removido com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Tipo de consutla não encontrado"
+     *     )
+     * )
      */
     public function destroy(tipoConsulta $tipoConsulta)
     {

@@ -1,0 +1,146 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "APIs For Thrift Store",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/tipoConsultas": {
+            "get": {
+                "tags": [
+                    "Tipo de Consultas"
+                ],
+                "summary": "Lista todos os Tipos de consulta",
+                "operationId": "4d3b2d58840dce84d7c6fb082e3ce563",
+                "responses": {
+                    "200": {
+                        "description": "Operação bem-sucedida"
+                    },
+                    "400": {
+                        "description": "Requisição inválida"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Tipo de Consultas"
+                ],
+                "summary": "Cria um novo Tipo de Consulta",
+                "operationId": "9d2efd168db8da9f9ad7abee26e9f982",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "descricao"
+                                ],
+                                "properties": {
+                                    "descricao": {
+                                        "type": "string",
+                                        "example": "Consulta Geral"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuário criado com sucesso"
+                    },
+                    "400": {
+                        "description": "Dados inválidos"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/tipoConsultas/{id}": {
+            "delete": {
+                "tags": [
+                    "Tipo de Consultas"
+                ],
+                "summary": "Remove um usuário pelo ID",
+                "operationId": "eff350bf1bf232be9bdd588048ca24c2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Tipo de consutla removido com sucesso"
+                    },
+                    "404": {
+                        "description": "Tipo de consutla não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Lista todos os usuários",
+                "operationId": "c457726701591d1183b53aa71fc13441",
+                "responses": {
+                    "200": {
+                        "description": "Operação bem-sucedida"
+                    },
+                    "400": {
+                        "description": "Requisição inválida"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "name": "bearerAuth",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Tipo de Consultas",
+            "description": "Tipo de Consultas"
+        },
+        {
+            "name": "Users",
+            "description": "Users"
+        }
+    ]
+}

@@ -24,6 +24,9 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/esquecisenha', [AuthController::class,'esqueciaSenha']);
 
+
+
+
 //Route::get('/test', [testeEmail::class, 'senEmail']);
 
 Route::middleware([JwtMiddleware::class])->group(function () {
