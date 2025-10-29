@@ -26,17 +26,47 @@ class AuthController extends Controller
     {
         $this->smsService = $smsService;
     }
-    
+
+    /**
+     * @OA\Post(
+     *     path="/api/register",
+     *     summary="Cria um novo usuario",
+     *     tags={"Auth"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name", "cpf", "password", "password_confirmation", "telefone", "email" },
+     *             @OA\Property(property="name", type="string", example="rodrigo lindo"),
+     *             @OA\Property(property="cpf", type="string", example="14785236945"),
+     *             @OA\Property(property="password", type="string", example="@saudell123"),
+     *             @OA\Property(property="password_confirmation", type="string", example="@saudell123"),
+     *             @OA\Property(property="telefone", type="string", example="5544978947894"),
+     *             @OA\Property(property="email", type="string", example="rodrigolindo@gmail.com"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Usuário criado com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Dados inválidos"
+     *     )
+     * )
+     */
     // User registration
     public function register(StoreUsuerRequest $request)
     {
         try {
-            $request->validated();
 
-            $request["telefone"] = "+" . $request["telefone"];
+            $data = $request->validated();
+            
+            $data['telefone'] = '+' . $data['telefone'];
+            $data['role'] = $data['role'] ?? 'user';
+            $data['status'] = $data['status'] ?? true;
 
-            $user = User::create($request->all());
-        
+            $user = User::create($data);
+
             $token = JWTAuth::fromUser($user);
 
             Log::info("usuario cirado com sucesso". $user->id);
@@ -48,6 +78,29 @@ class AuthController extends Controller
         
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/login",
+     *     summary="Login",
+     *     tags={"Auth"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"cpf", "password"},
+     *             @OA\Property(property="cpf", type="string", example="14785236945"),
+     *             @OA\Property(property="password", type="string", example="@saudell123"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Login realizado com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Dados inválidos"
+     *     )
+     * )
+     */
     public function login(Request $request)
     {
         $credentials = $request->only('cpf', 'password');

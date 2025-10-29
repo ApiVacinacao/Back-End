@@ -19,9 +19,6 @@ use Illuminate\Support\Facades\Mail as FacadesMail;
 
 class AgendamentoController extends Controller
 {
-
-
-
     /**
      * Display a listing of the resource.
      */

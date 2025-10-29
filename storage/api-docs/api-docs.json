@@ -5,6 +5,108 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Cria um novo usuario",
+                "operationId": "8a56853624e025573120a09a4c75d468",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "cpf",
+                                    "password",
+                                    "password_confirmation",
+                                    "telefone",
+                                    "email"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "rodrigo lindo"
+                                    },
+                                    "cpf": {
+                                        "type": "string",
+                                        "example": "14785236945"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "@saudell123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "example": "@saudell123"
+                                    },
+                                    "telefone": {
+                                        "type": "string",
+                                        "example": "5544978947894"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "rodrigolindo@gmail.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuário criado com sucesso"
+                    },
+                    "400": {
+                        "description": "Dados inválidos"
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login",
+                "operationId": "a3b306d14572d1f4bd6c064b3233e7b8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "cpf",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "cpf": {
+                                        "type": "string",
+                                        "example": "14785236945"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "@saudell123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Login realizado com sucesso"
+                    },
+                    "400": {
+                        "description": "Dados inválidos"
+                    }
+                }
+            }
+        },
         "/api/tipoConsultas": {
             "get": {
                 "tags": [
@@ -134,6 +236,10 @@
         }
     },
     "tags": [
+        {
+            "name": "Auth",
+            "description": "Auth"
+        },
         {
             "name": "Tipo de Consultas",
             "description": "Tipo de Consultas"
