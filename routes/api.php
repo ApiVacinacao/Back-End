@@ -24,20 +24,14 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/esquecisenha', [AuthController::class,'esqueciaSenha']);
 
-
-
-
 //Route::get('/test', [testeEmail::class, 'senEmail']);
 
 Route::middleware([JwtMiddleware::class])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::apiResource('medicos', MedicoController::class);
-    Route::patch('/medicos/{medico}/status', [MedicoController::class, 'toggleStatus']);
     Route::apiResource('localAtendimentos', LocalAtendimentoController::class);
-    Route::patch('localAtendimentos/{id}/toggle-status', [LocalAtendimentoController::class, 'toggleStatus']);
     Route::apiResource('tipoConsultas', TipoConsultaController::class);
-    Route::patch('tipoConsultas/{tipoConsulta}/toggle-status', [TipoConsultaController::class, 'toggleStatus']);
     Route::apiResource('especialidades', EspecialidadeController::class);
 
     Route::get('/users', [UserController::class, 'index']); 
@@ -52,7 +46,6 @@ Route::middleware([JwtMiddleware::class])->group(function () {
     Route::patch('agendamentos/{id}/toggle-status', [AgendamentoController::class, 'toggleStatus']);
 
     Route::apiResource('agendamentos', AgendamentoController::class)->except(['show']);
-    Route::patch('agendamentos/{id}/toggle-status', [AgendamentoController::class, 'toggleStatus']);
     Route::get('meus_agendamentos', [AgendamentoController::class, 'show']);
 
     Route::post('relatorios/agendamentos', [RelatorioController::class, 'relatorioAgendamento']);

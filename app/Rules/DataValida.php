@@ -20,7 +20,6 @@ class DataValida implements ValidationRule
 
         if($dataREpost < $dateToday ){
             $fail("A data é inferir a data a atual");
-        }
-        
+        }  
     }
 }
