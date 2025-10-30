@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -29,7 +29,7 @@ class UserController extends Controller
             Log::info("O usuário {$user->id} listou todos os cadastros");
     
             return response()->json($dados, 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Erro ao listar os usuários: ' . $e->getMessage());
             return response()->json([
                 'message' => 'Erro ao listar usuários',
@@ -47,21 +47,25 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        //return response()->json($user, 200);
+        return response()->json($user, 200);
     }
 
     public function update(UpdateUserRequest $request, User $user)
     {
         Gate::authorize('admin');
-    
+
         try {
+            if(Auth::id() === $user->id && !$request->status){
+                return response()->json(["voce não pode inativar o seu usario"],403);
+            }
+
             $validated = $request->validated();
             $user->update($validated);
     
-            Log::info("Usuário atualizado: {$user->id} por " . auth()->user()->id);
+            //Log::info("Usuário atualizado: {$user->id} por " . auth()->user()->id);
     
             return response()->json($user, 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("Erro ao atualizar usuário: " . $e->getMessage());
     
             return response()->json([
@@ -78,10 +82,10 @@ class UserController extends Controller
         try {
             $user->delete();
     
-            Log::info("Usuário deletado: {$user->id} por " . auth()->user()->id);
+            //Log::info("Usuário deletado: {$user->id} por " . auth()->user()->id);
     
             return response()->json(['message' => 'Usuário deletado com sucesso'], 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("Erro ao deletar usuário: " . $e->getMessage());
     
             return response()->json([

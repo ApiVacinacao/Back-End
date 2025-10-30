@@ -1,0 +1,11 @@
+version: '3'
+services:
+  laravel_apache_app:
+    build:
+      context: .
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/html
+    environment:
+      - PHP_DISPLAY_ERRORS=1

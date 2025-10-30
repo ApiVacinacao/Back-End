@@ -25,7 +25,7 @@ class StoretipoConsultaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'descricao' => 'required|string|max:255|unique:tipo_consultas,descricao',
+            'descricao' => 'required|string|min:5|max:50|unique:tipo_consultas,descricao',
         ];
     }
 
@@ -34,7 +34,8 @@ class StoretipoConsultaRequest extends FormRequest
         return [
             'descricao.required' => 'A descrição é obrigatória.',
             'descricao.string' => 'A descrição deve ser uma string.',
-            'descricao.max' => 'A descrição não pode exceder 255 caracteres.',
+            'descricao.max' => 'A descrição não pode exceder 50 caracteres.',
+            'descricao.min'=> 'A descrição não pode ter a baixo de 5 caracteres',
             'descricao.unique' => 'A descrição já existe na base de dados.',
         ];
     }

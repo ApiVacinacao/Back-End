@@ -24,9 +24,9 @@ class StorelocalAtendimentoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nome' => 'required|string|max:255',
-            'endereco' => 'required|string|max:255',
-            'telefone' => 'required|string|max:15', // Assuming phone numbers are stored as strings
+            'nome' => 'required|string|min:5|max:100|unique:local_atendimentos',
+            'endereco' => 'required|string|min:5|max:100',
+            'telefone' => 'required|string|min:10|max:12', // Assuming phone numbers are stored as strings
         ];
     }
 
@@ -34,8 +34,15 @@ class StorelocalAtendimentoRequest extends FormRequest
     {
         return [
             'nome.required' => 'O campo nome é obrigatório.',
+            'nome.min' => 'deve ter entre 5 a 100 carateres',
+            'nome.max' => 'deve ter entre 5 a 100 carateres',
+            'nome.unique' => 'ja exite com esse mesmo nome',
             'endereco.required' => 'O campo endereço é obrigatório.',
+            'endereco.min' => 'deve ter entre 5 a 100 carateres',
+            'endereco.max' => 'deve ter entre 5 a 100 carateres',
             'telefone.required' => 'O campo telefone é obrigatório.',
+            'telefone.min' => 'deve ter entre 10 há 12 numeros',
+            'telefone.max' => 'deve ter entre 10 há 12 numeros',
         ];
     }
 

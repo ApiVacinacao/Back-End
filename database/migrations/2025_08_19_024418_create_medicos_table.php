@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('especialidade_id');
             $table->foreign('especialidade_id')->references('id')->on('especialidades')->onDelete('cascade');
 
-            $table->boolean('status')->default(true); // sempre ativo
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }
