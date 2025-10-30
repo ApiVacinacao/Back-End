@@ -19,9 +19,24 @@ use Illuminate\Support\Facades\Mail as FacadesMail;
 
 class AgendamentoController extends Controller
 {
+
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/agendamentos",
+     *     summary="Lista todos os Agendamentos",
+     *     tags={"Agendamentos"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Operação bem-sucedida"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Requisição inválida"
+     *     )
+     * )
      */
+
     public function index()
     {
         Gate::authorize('admin');
@@ -50,7 +65,32 @@ class AgendamentoController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/agendamentos",
+     *     summary="Cria um novo Agendamento",
+     *     tags={"Agendamentos"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"data", "hora", "medico_id", "local_atendimento_id", "tipo_consulta_id"},
+     *              @OA\Property(property="data", type="string", format="date", example="2025-12-31"),
+     *              @OA\Property(property="hora", type="string", format="time", example="14:30:00"),
+     *              @OA\Property(property="user_id", type="integer", example=1),
+     *              @OA\Property(property="medico_id", type="integer", example=1),
+     *              @OA\Property(property="local_atendimento_id", type="integer", example=1),
+     *              @OA\Property(property="tipo_consulta_id", type="integer", example=1),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Usuário criado com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Dados inválidos"
+     *     )
+     * )
      */
     public function store(StoreAgendamentoRequest $request)
     {
@@ -64,13 +104,13 @@ class AgendamentoController extends Controller
             $agendamento = Agendamento::create($request->validated());
             $user = Auth()->user();
 
-
             //envio de mensagem
             Mail::to($user->email)->send(new AgendamentoEmail($user, $agendamento));
         
             Log::info("Usuário {$user->id} criou o agendamento {$agendamento->id}.");
             return response()->json($agendamento, 201);
         } catch (\Exception $e) {
+            Log::error('Erro ao criar agendamento: ' . $e->getMessage());
             return response()->json(['error' => 'Erro ao criar agendamento: ' . $e->getMessage()], 500);
         }
     }
@@ -141,8 +181,29 @@ class AgendamentoController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/agendamentos/{id}",
+     *     summary="Remove um agendamento pelo ID",
+     *     tags={"Agendamentos"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID do agendamento",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Tipo de consutla removido com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Tipo de consutla não encontrado"
+     *     )
+     * )
      */
+
     public function destroy(Agendamento $agendamento)
     {
         Gate::authorize('admin');

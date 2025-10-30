@@ -5,6 +5,126 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/agendamentos": {
+            "get": {
+                "tags": [
+                    "Agendamentos"
+                ],
+                "summary": "Lista todos os Agendamentos",
+                "operationId": "515bd714c8d1498766d76330675e2bf6",
+                "responses": {
+                    "200": {
+                        "description": "Operação bem-sucedida"
+                    },
+                    "400": {
+                        "description": "Requisição inválida"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Agendamentos"
+                ],
+                "summary": "Cria um novo Agendamento",
+                "operationId": "fc85b6e93066d4998b605da62a4dace0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "data",
+                                    "hora",
+                                    "medico_id",
+                                    "local_atendimento_id",
+                                    "tipo_consulta_id"
+                                ],
+                                "properties": {
+                                    "data": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-12-31"
+                                    },
+                                    "hora": {
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "14:30:00"
+                                    },
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "medico_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "local_atendimento_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "tipo_consulta_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuário criado com sucesso"
+                    },
+                    "400": {
+                        "description": "Dados inválidos"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/agendamentos/{id}": {
+            "delete": {
+                "tags": [
+                    "Agendamentos"
+                ],
+                "summary": "Remove um agendamento pelo ID",
+                "operationId": "757c6c6247b45e85ae0522fdff446298",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do agendamento",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Tipo de consutla removido com sucesso"
+                    },
+                    "404": {
+                        "description": "Tipo de consutla não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/register": {
             "post": {
                 "tags": [
@@ -85,11 +205,11 @@
                                 "properties": {
                                     "cpf": {
                                         "type": "string",
-                                        "example": "14785236945"
+                                        "example": "11122233347"
                                     },
                                     "password": {
                                         "type": "string",
-                                        "example": "@saudell123"
+                                        "example": "password"
                                     }
                                 },
                                 "type": "object"
@@ -236,6 +356,10 @@
         }
     },
     "tags": [
+        {
+            "name": "Agendamentos",
+            "description": "Agendamentos"
+        },
         {
             "name": "Auth",
             "description": "Auth"
