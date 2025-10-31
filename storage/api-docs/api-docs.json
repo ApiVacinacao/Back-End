@@ -327,6 +327,47 @@
                 }
             }
         },
+        "/api/esquecisenha": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Esqueci minha senha",
+                "operationId": "74436bbc973044f71b293ba6f2ad1c66",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "cpf"
+                                ],
+                                "properties": {
+                                    "cpf": {
+                                        "type": "string",
+                                        "example": "11122233347"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Senha alterada com sucesso"
+                    },
+                    "404": {
+                        "description": "CPF não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/especialidades": {
             "get": {
                 "tags": [
