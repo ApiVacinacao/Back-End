@@ -7,6 +7,36 @@ use Illuminate\Http\Request;
 
 class RelatorioController
 {
+    
+        /**
+     * @OA\Post(
+     *     path="/api/relatorios/agendamentos",
+     *     summary="relatorio de agendamentos",
+     *     tags={"Relatorios"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"data_inicial", "data_final", "user_id", "medico_id", "local_atendimento_id", "tipo_consulta_id"},
+        *             @OA\Property(property="data_inicial", type="string", format="date", example="2024-01-01"),
+        *             @OA\Property(property="data_final", type="string", format="date", example="2024-01-31"),
+        *             @OA\Property(property="user_id", type="integer", example=1),
+        *             @OA\Property(property="medico_id", type="integer", example=2),
+        *             @OA\Property(property="local_atendimento_id", type="integer", example=3),
+        *             @OA\Property(property="tipo_consulta_id", type="integer", example=4)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Relatorio tirado com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Erro ao gerar relatorio"
+     *     )
+     * )
+     */
+
     public function relatorioAgendamento(Request $request)
     {
 

@@ -12,7 +12,20 @@ use Illuminate\Support\Facades\Log;
 class EspecialidadeController
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/especialidades",
+     *     summary="Listar todas as especialidades",
+     *     tags={"Especialidades"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(
+     *         response=204,
+     *         description="Lista de especialidades retornada com sucesso",
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Nenhuma especialidade encontrada",
+     *     )
+     * )
      */
     public function index()
     {
@@ -44,7 +57,30 @@ class EspecialidadeController
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/especialidades",
+     *     summary="Criar uma nova especialidade",
+     *     tags={"Especialidades"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"nome", "descricao", "area", "status"},
+     *             @OA\Property(property="nome", type="string", example="Cardiologia"),
+     *             @OA\Property(property="descricao", type="string", example="Consulta Geral"),
+     *             @OA\Property(property="area", type="string", example="Saúde"),
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Especialidade criada com sucesso",
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Erro ao criar especialidade",
+     *     )
+     * )
      */
     public function store(StoreEspecialidadeRequest $request)
     {
@@ -82,7 +118,37 @@ class EspecialidadeController
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *     path="/api/especialidades/{id}",
+     *     summary="Atualizar os dados de uma especialidade",
+     *     tags={"Especialidades"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID da especialidade a ser atualizada",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"nome", "descricao", "area", "status"},
+     *             @OA\Property(property="nome", type="string", example="Cardiologia"),
+     *             @OA\Property(property="descricao", type="string", example="Consulta Geral"),
+     *             @OA\Property(property="area", type="string", example="Medica"),
+     *             @OA\Property(property="status", type="boolean", example=true)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Especialidade atualizada com sucesso",
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Especialidade não encontrada",
+     *     )
+     * )
      */
     public function update(UpdateEspecialidadeRequest $request, Especialidade $especialidade)
     {
@@ -100,7 +166,27 @@ class EspecialidadeController
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/especialidades/{id}",
+     *     summary="Remover uma especialidade",
+     *     tags={"Especialidades"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID da especialidade a ser removida",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Especialidade removida com sucesso",
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Especialidade não encontrada",
+     *     )
+     * )
      */
     public function destroy(Especialidade $especialidade)
     {

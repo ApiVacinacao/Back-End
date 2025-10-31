@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "APIs For Thrift Store",
+        "title": "TCC - Back-End API Documentation",
         "version": "1.0.0"
     },
     "paths": {
@@ -11,6 +11,7 @@
                     "Agendamentos"
                 ],
                 "summary": "Lista todos os Agendamentos",
+                "description": "Listar todos os agendamentos",
                 "operationId": "515bd714c8d1498766d76330675e2bf6",
                 "responses": {
                     "200": {
@@ -92,12 +93,111 @@
                 ]
             }
         },
+        "/api/meus_agendamentos": {
+            "get": {
+                "tags": [
+                    "Agendamentos"
+                ],
+                "summary": "Exibe o agendamento do paciente logado",
+                "operationId": "42fa92fc2619c9fc44be2add4c83538f",
+                "responses": {
+                    "204": {
+                        "description": "Operação bem-sucedida"
+                    },
+                    "404": {
+                        "description": "Requisição inválida"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/agendamentos/{id}": {
+            "put": {
+                "tags": [
+                    "Agendamentos"
+                ],
+                "summary": "Atualiza um agendamento pelo ID",
+                "operationId": "768345b5aba8f4285ea89b069af657fc",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do agendamento",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "data",
+                                    "hora",
+                                    "medico_id",
+                                    "local_atendimento_id",
+                                    "tipo_consulta_id"
+                                ],
+                                "properties": {
+                                    "data": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-12-31"
+                                    },
+                                    "hora": {
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "14:30:00"
+                                    },
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "medico_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "local_atendimento_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "tipo_consulta_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Tipo de consutla atualizado com sucesso"
+                    },
+                    "404": {
+                        "description": "Tipo de consutla não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
             "delete": {
                 "tags": [
                     "Agendamentos"
                 ],
                 "summary": "Remove um agendamento pelo ID",
+                "description": "Deletar agendamento",
                 "operationId": "757c6c6247b45e85ae0522fdff446298",
                 "parameters": [
                     {
@@ -227,6 +327,596 @@
                 }
             }
         },
+        "/api/especialidades": {
+            "get": {
+                "tags": [
+                    "Especialidades"
+                ],
+                "summary": "Listar todas as especialidades",
+                "operationId": "6584440eceb4e8121978fbb85682918b",
+                "responses": {
+                    "204": {
+                        "description": "Lista de especialidades retornada com sucesso"
+                    },
+                    "404": {
+                        "description": "Nenhuma especialidade encontrada"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Especialidades"
+                ],
+                "summary": "Criar uma nova especialidade",
+                "operationId": "815ad5cf55785ef25a707dc07d1fdf1b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nome",
+                                    "descricao",
+                                    "area",
+                                    "status"
+                                ],
+                                "properties": {
+                                    "nome": {
+                                        "type": "string",
+                                        "example": "Cardiologia"
+                                    },
+                                    "descricao": {
+                                        "type": "string",
+                                        "example": "Consulta Geral"
+                                    },
+                                    "area": {
+                                        "type": "string",
+                                        "example": "Saúde"
+                                    },
+                                    "status": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Especialidade criada com sucesso"
+                    },
+                    "404": {
+                        "description": "Erro ao criar especialidade"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/especialidades/{id}": {
+            "put": {
+                "tags": [
+                    "Especialidades"
+                ],
+                "summary": "Atualizar os dados de uma especialidade",
+                "operationId": "b0468a2dc51d9af3301f0eff5e987272",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da especialidade a ser atualizada",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nome",
+                                    "descricao",
+                                    "area",
+                                    "status"
+                                ],
+                                "properties": {
+                                    "nome": {
+                                        "type": "string",
+                                        "example": "Cardiologia"
+                                    },
+                                    "descricao": {
+                                        "type": "string",
+                                        "example": "Consulta Geral"
+                                    },
+                                    "area": {
+                                        "type": "string",
+                                        "example": "Medica"
+                                    },
+                                    "status": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Especialidade atualizada com sucesso"
+                    },
+                    "404": {
+                        "description": "Especialidade não encontrada"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Especialidades"
+                ],
+                "summary": "Remover uma especialidade",
+                "operationId": "14e81c3265ef55591db4be821cd0c651",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da especialidade a ser removida",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Especialidade removida com sucesso"
+                    },
+                    "404": {
+                        "description": "Especialidade não encontrada"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/localAtendimentos": {
+            "get": {
+                "tags": [
+                    "Local de Atendimentos"
+                ],
+                "summary": "Listar todos os locais de atendimento",
+                "operationId": "e0db85bb813bd5cdadc5b3d5f4f4ff26",
+                "responses": {
+                    "204": {
+                        "description": "Lista de locais de atendimento retornada com sucesso"
+                    },
+                    "404": {
+                        "description": "Nenhum local de atendimento encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Local de Atendimentos"
+                ],
+                "summary": "Criar um novo local de atendimento",
+                "operationId": "4fb570f1aee97e5bb8cee73aec59f34a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nome",
+                                    "endereco",
+                                    "telefone"
+                                ],
+                                "properties": {
+                                    "nome": {
+                                        "type": "string",
+                                        "example": "Clinica Saúde"
+                                    },
+                                    "endereco": {
+                                        "type": "string",
+                                        "example": "Rua das Flores, 123"
+                                    },
+                                    "telefone": {
+                                        "type": "string",
+                                        "example": "(11) 98765-4321"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Local de atendimento criado com sucesso"
+                    },
+                    "404": {
+                        "description": "Erro ao criar local de atendimento"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/localAtendimentos/{id}": {
+            "put": {
+                "tags": [
+                    "Local de Atendimentos"
+                ],
+                "summary": "Atualizar os dados de um Local de Atendimento",
+                "operationId": "e1183d1f35a39cf4622b3c2d5430875a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id do local de atendimento a ser atualizado",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nome",
+                                    "endereco",
+                                    "telefone"
+                                ],
+                                "properties": {
+                                    "nome": {
+                                        "type": "string",
+                                        "example": "Clinica Saúde"
+                                    },
+                                    "endereco": {
+                                        "type": "string",
+                                        "example": "Rua das Flores, 123"
+                                    },
+                                    "telefone": {
+                                        "type": "string",
+                                        "example": "(11) 98765-4321"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Local de atendimento atualizado com sucesso"
+                    },
+                    "404": {
+                        "description": "Local de atendimento não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Local de Atendimentos"
+                ],
+                "summary": "Remover um local de atendimento",
+                "operationId": "0884f24243441ae86f2296970b904a62",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do local de atendimento a ser removido",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Local de atendimento removido com sucesso"
+                    },
+                    "404": {
+                        "description": "Local de atendimento não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/medicos": {
+            "get": {
+                "tags": [
+                    "Medicos"
+                ],
+                "summary": "Listar todos os médicos",
+                "operationId": "c7cebce3506c331d127872eee61c4ded",
+                "responses": {
+                    "204": {
+                        "description": "Lista de médicos retornada com sucesso"
+                    },
+                    "404": {
+                        "description": "Nenhum médico encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/medicos/{id}": {
+            "put": {
+                "tags": [
+                    "Medicos"
+                ],
+                "summary": "Atualizar um médico",
+                "operationId": "0263d24c7869aded8d123a8f045ab68d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do médico a ser atualizado",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nome",
+                                    "cpf",
+                                    "crm",
+                                    "especialidade_id",
+                                    "status"
+                                ],
+                                "properties": {
+                                    "nome": {
+                                        "type": "string",
+                                        "example": "Dr. Rodrigo"
+                                    },
+                                    "cpf": {
+                                        "type": "string",
+                                        "example": "123.456.789-00"
+                                    },
+                                    "crm": {
+                                        "type": "string",
+                                        "example": "CRM123456"
+                                    },
+                                    "especialidade_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "status": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Médico atualizado com sucesso"
+                    },
+                    "404": {
+                        "description": "Médico não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Medicos"
+                ],
+                "summary": "Criar um novo Medico",
+                "operationId": "00493663b2ef311c609ebb0ae89ebad5",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nome",
+                                    "cpf",
+                                    "crm",
+                                    "especialidade_id",
+                                    "status"
+                                ],
+                                "properties": {
+                                    "nome": {
+                                        "type": "string",
+                                        "example": "Dr. Rodrigo"
+                                    },
+                                    "cpf": {
+                                        "type": "string",
+                                        "example": "123.456.789-00"
+                                    },
+                                    "crm": {
+                                        "type": "string",
+                                        "example": "CRM123456"
+                                    },
+                                    "especialidade_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "status": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Medico criado com sucesso"
+                    },
+                    "404": {
+                        "description": "Erro ao criar Medico"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Medicos"
+                ],
+                "summary": "Remover um médico",
+                "operationId": "ecda6035bb1152f7f6297e1ab836889c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do médico a ser removido",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Médico removido com sucesso"
+                    },
+                    "404": {
+                        "description": "Médico não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/relatorios/agendamentos": {
+            "post": {
+                "tags": [
+                    "Relatorios"
+                ],
+                "summary": "relatorio de agendamentos",
+                "operationId": "27a8ce91d5ca0c36f98dd056013e00b2",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "data_inicial",
+                                    "data_final",
+                                    "user_id",
+                                    "medico_id",
+                                    "local_atendimento_id",
+                                    "tipo_consulta_id"
+                                ],
+                                "properties": {
+                                    "data_inicial": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-01-01"
+                                    },
+                                    "data_final": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-01-31"
+                                    },
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "medico_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "local_atendimento_id": {
+                                        "type": "integer",
+                                        "example": 3
+                                    },
+                                    "tipo_consulta_id": {
+                                        "type": "integer",
+                                        "example": 4
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Relatorio tirado com sucesso"
+                    },
+                    "400": {
+                        "description": "Erro ao gerar relatorio"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/tipoConsultas": {
             "get": {
                 "tags": [
@@ -275,10 +965,62 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Usuário criado com sucesso"
+                        "description": "Tipo de consutla criado com sucesso"
                     },
                     "400": {
-                        "description": "Dados inválidos"
+                        "description": "Erro ao criar tipo de consulta"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/tipoConsultas/{id}/toggle-status": {
+            "put": {
+                "tags": [
+                    "Tipo de Consultas"
+                ],
+                "summary": "Atualizar o status de um Tipo de Consulta",
+                "operationId": "f31b47d694778e29581f10fd1a39a8ab",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "status"
+                                ],
+                                "properties": {
+                                    "status": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Tipo de consutla atualizado com sucesso"
+                    },
+                    "404": {
+                        "description": "Tipo de consutla não encontrado"
                     }
                 },
                 "security": [
@@ -289,11 +1031,61 @@
             }
         },
         "/api/tipoConsultas/{id}": {
+            "put": {
+                "tags": [
+                    "Tipo de Consultas"
+                ],
+                "summary": "Atualizar os dados de um Tipo de Consulta",
+                "operationId": "d85e9bc981b6bdae7ad1471000c6b3b3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "descricao"
+                                ],
+                                "properties": {
+                                    "descricao": {
+                                        "type": "string",
+                                        "example": "Consulta Geral"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Tipo de consutla atualizado com sucesso"
+                    },
+                    "404": {
+                        "description": "Tipo de consutla não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
             "delete": {
                 "tags": [
                     "Tipo de Consultas"
                 ],
-                "summary": "Remove um usuário pelo ID",
+                "summary": "Remover um Tipo de Consulta",
                 "operationId": "eff350bf1bf232be9bdd588048ca24c2",
                 "parameters": [
                     {
@@ -308,7 +1100,7 @@
                 ],
                 "responses": {
                     "204": {
-                        "description": "Tipo de consutla removido com sucesso"
+                        "description": "Tipo de consutla deletado com sucesso"
                     },
                     "404": {
                         "description": "Tipo de consutla não encontrado"
@@ -342,6 +1134,145 @@
                     }
                 ]
             }
+        },
+        "/api/users/{id}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Mostrar os dados de um Usuario",
+                "operationId": "36a33ff774d5cba33c039dec2c3e0287",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "usuario encontrado com sucesso"
+                    },
+                    "404": {
+                        "description": "Usuario não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Atualizar os dados de um Usuario",
+                "operationId": "b9091397c8b25f12c6adb74be6ce3a5a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "cpf",
+                                    "password",
+                                    "password_confirmation",
+                                    "telefone",
+                                    "email"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "rodrigo lindo"
+                                    },
+                                    "cpf": {
+                                        "type": "string",
+                                        "example": "14785236945"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "@saudell123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "example": "@saudell123"
+                                    },
+                                    "telefone": {
+                                        "type": "string",
+                                        "example": "5544978947894"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "rodrigolindo@gmail.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Usuario atualizado com sucesso"
+                    },
+                    "404": {
+                        "description": "Usuario não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Remover um usuario",
+                "operationId": "fa56cffde745d3f152f95cbacd936c0b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Usuario removido com sucesso"
+                    },
+                    "404": {
+                        "description": "Usuario não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -363,6 +1294,22 @@
         {
             "name": "Auth",
             "description": "Auth"
+        },
+        {
+            "name": "Especialidades",
+            "description": "Especialidades"
+        },
+        {
+            "name": "Local de Atendimentos",
+            "description": "Local de Atendimentos"
+        },
+        {
+            "name": "Medicos",
+            "description": "Medicos"
+        },
+        {
+            "name": "Relatorios",
+            "description": "Relatorios"
         },
         {
             "name": "Tipo de Consultas",

@@ -73,11 +73,11 @@ class TipoConsultaController extends Controller
      *     ),
      *     @OA\Response(
      *         response=201,
-     *         description="Usuário criado com sucesso"
+     *         description="Tipo de consutla criado com sucesso"
      *     ),
      *     @OA\Response(
      *         response=400,
-     *         description="Dados inválidos"
+     *         description="Erro ao criar tipo de consulta"
      *     )
      * )
      */
@@ -101,7 +101,34 @@ class TipoConsultaController extends Controller
     }
 
     /**
-     * Alterar status de ativo/inativo
+     * @OA\Put(
+     *     path="/api/tipoConsultas/{id}/toggle-status",
+     *     summary="Atualizar o status de um Tipo de Consulta",
+     *     tags={"Tipo de Consultas"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID do usuário",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"status"},
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Tipo de consutla atualizado com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Tipo de consutla não encontrado"
+     *     )
+     * )
      */
     public function toggleStatus(tipoConsulta $tipoConsulta)
     {
@@ -137,7 +164,34 @@ class TipoConsultaController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *     path="/api/tipoConsultas/{id}",
+     *     summary="Atualizar os dados de um Tipo de Consulta",
+     *     tags={"Tipo de Consultas"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID do usuário",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"descricao"},
+     *             @OA\Property(property="descricao", type="string", example="Consulta Geral"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Tipo de consutla atualizado com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Tipo de consutla não encontrado"
+     *     )
+     * )
      */
     public function update(UpdatetipoConsultaRequest $request, tipoConsulta $tipoConsulta)
     {
@@ -161,7 +215,7 @@ class TipoConsultaController extends Controller
     /**
      * @OA\Delete(
      *     path="/api/tipoConsultas/{id}",
-     *     summary="Remove um usuário pelo ID",
+     *     summary="Remover um Tipo de Consulta",
      *     tags={"Tipo de Consultas"},
      *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
@@ -173,7 +227,7 @@ class TipoConsultaController extends Controller
      *     ),
      *     @OA\Response(
      *         response=204,
-     *         description="Tipo de consutla removido com sucesso"
+     *         description="Tipo de consutla deletado com sucesso"
      *     ),
      *     @OA\Response(
      *         response=404,

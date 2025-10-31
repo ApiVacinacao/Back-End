@@ -129,6 +129,30 @@ class AuthController extends Controller
         return response()->json(['message' => 'Successfully logged out']);
     }
 
+
+    /**
+     * @OA\Post(
+     *     path="/api/esquecisenha",
+     *     summary="Esqueci minha senha",
+     *     tags={"Auth"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"cpf"},
+     *             @OA\Property(property="cpf", type="string", example="11122233347"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Senha alterada com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="CPF não encontrado"
+     *     )
+     * )
+     */
     public function esqueciaSenha(Request $request){
 
         try {

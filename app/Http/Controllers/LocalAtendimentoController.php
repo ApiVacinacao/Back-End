@@ -14,7 +14,20 @@ use Log;
 class LocalAtendimentoController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/localAtendimentos",
+     *     summary="Listar todos os locais de atendimento",
+     *     tags={"Local de Atendimentos"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(
+     *         response=204,
+     *         description="Lista de locais de atendimento retornada com sucesso",
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Nenhum local de atendimento encontrado",
+     *     )
+     * )
      */
     public function index()
     {
@@ -39,7 +52,29 @@ class LocalAtendimentoController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/localAtendimentos",
+     *     summary="Criar um novo local de atendimento",
+     *     tags={"Local de Atendimentos"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"nome","endereco","telefone"},
+     *             @OA\Property(property="nome", type="string", example="Clinica Saúde"),
+     *             @OA\Property(property="endereco", type="string", example="Rua das Flores, 123"),
+     *             @OA\Property(property="telefone", type="string", example="(11) 98765-4321"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Local de atendimento criado com sucesso",
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Erro ao criar local de atendimento",
+     *     )
+     * )
      */
     public function store(StorelocalAtendimentoRequest $request)
     {
@@ -100,7 +135,36 @@ class LocalAtendimentoController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *     path="/api/localAtendimentos/{id}",
+     *     summary="Atualizar os dados de um Local de Atendimento",
+     *     tags={"Local de Atendimentos"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Id do local de atendimento a ser atualizado",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"nome","endereco","telefone"},
+     *             @OA\Property(property="nome", type="string", example="Clinica Saúde"),
+     *             @OA\Property(property="endereco", type="string", example="Rua das Flores, 123"),
+     *             @OA\Property(property="telefone", type="string", example="(11) 98765-4321"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Local de atendimento atualizado com sucesso",
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Local de atendimento não encontrado",
+     *     )
+     * )
      */
     public function update(UpdatelocalAtendimentoRequest $request, localAtendimento $localAtendimento)
     {
@@ -124,7 +188,27 @@ class LocalAtendimentoController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/localAtendimentos/{id}",
+     *     summary="Remover um local de atendimento",
+     *     tags={"Local de Atendimentos"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID do local de atendimento a ser removido",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Local de atendimento removido com sucesso",
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Local de atendimento não encontrado",
+     *     )
+     * )
      */
     public function destroy(localAtendimento $localAtendimento)
     {

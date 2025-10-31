@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 /**
 *   @OA\Info(
-*       title="APIs For Thrift Store",
+*       title="TCC - Back-End API Documentation",
 *       version="1.0.0",
 *   ),
 *   @OA\SecurityScheme(

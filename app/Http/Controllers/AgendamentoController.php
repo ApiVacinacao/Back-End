@@ -160,7 +160,20 @@ class AgendamentoController extends Controller
     }
 
     /**
-     * Mostrar agendamentos do usuário logado
+     * @OA\Get(
+     *     path="/api/meus_agendamentos",
+     *     summary="Exibe o agendamento do paciente logado",
+     *     tags={"Agendamentos"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(
+     *         response=204,
+     *         description="Operação bem-sucedida"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Requisição inválida"
+     *     )
+     * )
      */
     public function show()
     {
@@ -183,7 +196,39 @@ class AgendamentoController extends Controller
     }
 
     /**
-     * Atualizar agendamento existente
+     * @OA\Put(
+     *     path="/api/agendamentos/{id}",
+     *     summary="Atualiza um agendamento pelo ID",
+     *     tags={"Agendamentos"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID do agendamento",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"data", "hora", "medico_id", "local_atendimento_id", "tipo_consulta_id"},
+     *              @OA\Property(property="data", type="string", format="date", example="2025-12-31"),
+     *              @OA\Property(property="hora", type="string", format="time", example="14:30:00"),
+     *              @OA\Property(property="user_id", type="integer", example=1),
+     *              @OA\Property(property="medico_id", type="integer", example=1),
+     *              @OA\Property(property="local_atendimento_id", type="integer", example=1),
+     *              @OA\Property(property="tipo_consulta_id", type="integer", example=1),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Tipo de consutla atualizado com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Tipo de consutla não encontrado"
+     *     )
+     * )
      */
     public function update(UpdateAgendamentoRequest $request, Agendamento $agendamento)
     {

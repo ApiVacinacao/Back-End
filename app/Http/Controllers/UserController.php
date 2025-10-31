@@ -62,11 +62,69 @@ class UserController extends Controller
         //
     }
 
-
+    /**
+     * @OA\Get(
+     *     path="/api/users/{id}",
+     *     summary="Mostrar os dados de um Usuario",
+     *     tags={"Users"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID do usuário",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="usuario encontrado com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Usuario não encontrado"
+     *     )
+     * )
+     */
     public function show(User $user)
     {
         return response()->json($user, 200);
     }
+
+    /**
+     * @OA\Put(
+     *     path="/api/users/{id}",
+     *     summary="Atualizar os dados de um Usuario",
+     *     tags={"Users"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID do usuário",
+     *         @OA\Schema(type="integer")
+     *     ),
+    *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name", "cpf", "password", "password_confirmation", "telefone", "email" },
+     *             @OA\Property(property="name", type="string", example="rodrigo lindo"),
+     *             @OA\Property(property="cpf", type="string", example="14785236945"),
+     *             @OA\Property(property="password", type="string", example="@saudell123"),
+     *             @OA\Property(property="password_confirmation", type="string", example="@saudell123"),
+     *             @OA\Property(property="telefone", type="string", example="5544978947894"),
+     *             @OA\Property(property="email", type="string", example="rodrigolindo@gmail.com"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Usuario atualizado com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Usuario não encontrado"
+     *     )
+     * )
+     */
 
     public function update(UpdateUserRequest $request, User $user)
     {
@@ -93,6 +151,29 @@ class UserController extends Controller
         }
     }
     
+    /**
+     * @OA\Delete(
+     *     path="/api/users/{id}",
+     *     summary="Remover um usuario",
+     *     tags={"Users"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID do usuário",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Usuario removido com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Usuario não encontrado"
+     *     )
+     * )
+     */
     public function destroy(User $user)
     {
         Gate::authorize('admin');
