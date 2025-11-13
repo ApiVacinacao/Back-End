@@ -24,30 +24,28 @@ class AuthController extends Controller
             'cpf' => 'required|string|max:255',
             'password' => 'required|string|min:6|confirmed',
             'email' => 'required|string|email|max:255|unique:users',
-            'status' => 'required|boolean',
             'role' => 'in:user,admin',
         ]);
-
-
-        if($validator->fails()){
+    
+        if ($validator->fails()) {
             return response()->json($validator->errors()->toJson(), 400);
         }
-
+    
         $user = User::create([
             'name' => $request->get('name'),
             'cpf' => $request->get('cpf'),
             'password' => Hash::make($request->get('password')),
             'email' => $request->get('email'),
-            'status' => $request->get('status', true) ,
+            'status' => true, // 👈 força o status ativo SEM depender do request
             'role' => $request->get('role', 'user'),
         ]);
-        
+    
         $token = JWTAuth::fromUser($user);
-
-        Log::info("usuario cirado com sucesso". $user->id);
-        return response()->json(compact('user','token'), 201);
+    
+        Log::info("Usuário criado com sucesso: " . $user->id);
+        return response()->json(compact('user', 'token'), 201);
     }
-
+    
     public function login(Request $request)
     {
         $credentials = $request->only('cpf', 'password');
