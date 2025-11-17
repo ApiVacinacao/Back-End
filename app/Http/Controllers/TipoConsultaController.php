@@ -136,8 +136,35 @@ class TipoConsultaController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
+ /**
+     * @OA\Put(
+     *     path="/api/tipoConsultas/{id}",
+     *     summary="Atualizar os dados de um Tipo de Consulta",
+     *     tags={"Tipo de Consultas"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID do usuário",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"descricao"},
+     *             @OA\Property(property="descricao", type="string", example="Consulta Geral"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Tipo de consutla atualizado com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Tipo de consutla não encontrado"
+     *     )
+     * )
      */
     public function update(UpdatetipoConsultaRequest $request, tipoConsulta $tipoConsulta)
     {

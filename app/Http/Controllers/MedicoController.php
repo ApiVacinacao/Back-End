@@ -14,7 +14,20 @@ use Illuminate\Routing\Controller;
 class MedicoController extends Controller
 {
     /**
-     * Listar todos os médicos com a especialidade
+     * @OA\Get(
+     *     path="/api/medicos",
+     *     summary="Listar todos os médicos",
+     *     tags={"Medicos"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(
+     *         response=204,
+     *         description="Lista de médicos retornada com sucesso",
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Nenhum médico encontrado",
+     *     )
+     * )
      */
     public function index()
     {
@@ -24,8 +37,32 @@ class MedicoController extends Controller
         return response()->json($medicos, 200);
     }
 
-    /**
-     * Criar novo médico
+/**
+     * @OA\Post(
+     *     path="/api/medicos/{id}",
+     *     summary="Criar um novo Medico",
+     *     tags={"Medicos"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"nome","cpf","crm","especialidade_id","status"},
+     *             @OA\Property(property="nome", type="string", example="Dr. Rodrigo"),
+     *             @OA\Property(property="cpf", type="string", example="123.456.789-00"),
+     *             @OA\Property(property="crm", type="string", example="CRM123456"),
+     *             @OA\Property(property="especialidade_id", type="integer", example=1),
+     *             @OA\Property(property="status", type="boolean", example=true)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Medico criado com sucesso",
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Erro ao criar Medico",
+     *     )
+     * )
      */
     public function store(StoreMedicoRequest $request)
     {
@@ -45,23 +82,6 @@ class MedicoController extends Controller
         }
     }
 
-    public function toggleStatus(Medico $medico)
-    {
-        Gate::authorize('admin');
-
-        try {
-            // Alterna o status
-            $medico->status = !$medico->status;
-            $medico->save();
-
-            // Retorna o médico atualizado
-            return response()->json($medico, 200);
-        } catch (\Exception $e) {
-            \Log::error('Erro ao atualizar status do Médico: ' . $e->getMessage());
-            return response()->json(['error' => $e->getMessage()], 400);
-        }
-    }
-
     /**
      * Atualizar apenas o status do médico
      */
@@ -77,7 +97,7 @@ class MedicoController extends Controller
             // Retorna o médico atualizado
             return response()->json($medico, 200);
         } catch (\Exception $e) {
-            \Log::error('Erro ao atualizar status do Médico: ' . $e->getMessage());
+            Log::error('Erro ao atualizar status do Médico: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }
@@ -91,8 +111,39 @@ class MedicoController extends Controller
         //return response()->json($medico, 200);
     }
 
-    /**
-     * Atualizar médico existente
+/**
+     * @OA\Put(
+     *     path="/api/medicos/{id}",
+     *     summary="Atualizar um médico",
+     *     tags={"Medicos"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID do médico a ser atualizado",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"nome","cpf","crm","especialidade_id","status"},
+     *             @OA\Property(property="nome", type="string", example="Dr. Rodrigo"),
+     *             @OA\Property(property="cpf", type="string", example="123.456.789-00"),
+     *             @OA\Property(property="crm", type="string", example="CRM123456"),
+     *             @OA\Property(property="especialidade_id", type="integer", example=1),
+     *             @OA\Property(property="status", type="boolean", example=true)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Médico atualizado com sucesso",
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Médico não encontrado",
+     *     )
+     * )
      */
     public function update(UpdateMedicoRequest $request, Medico $medico)
     {
@@ -112,7 +163,27 @@ class MedicoController extends Controller
     }
 
     /**
-     * Deletar médico
+     * @OA\Delete(
+     *     path="/api/medicos/{id}",
+     *     summary="Remover um médico",
+     *     tags={"Medicos"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID do médico a ser removido",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Médico removido com sucesso",
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Médico não encontrado",
+     *     )
+     * )
      */
     public function destroy(Medico $medico)
     {

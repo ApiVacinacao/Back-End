@@ -129,44 +129,67 @@ class AuthController extends Controller
         return response()->json(['message' => 'Successfully logged out']);
     }
 
-    public function esqueciaSenha(Request $request){
 
-        try {
+    /**
+     * @OA\Post(
+     *     path="/api/esquecisenha",
+     *     summary="Esqueci minha senha",
+     *     tags={"Auth"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"cpf"},
+     *             @OA\Property(property="cpf", type="string", example="11122233347"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Senha alterada com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="CPF não encontrado"
+     *     )
+     * )
+     */
+    
+    public function esqueciaSenha(Request $request)
+{
+    try {
+        $request->validate([
+            'cpf' => 'required|exists:users,cpf',
+        ], [
+            'cpf.required' => 'O campo CPF é obrigatório.',
+            'cpf.exists' => 'CPF não encontrado no sistema.'
+        ]);
 
-            // validando se o CPF ja esta ccadastrado no sistema
-            $request->validate([
-            'cpf' => 'exists:users,cpf',
-            ],[
-                'cpf.exists' => 'não foi encontrado nenhum CPF válido no sistema'
-            ]);
-            // procutrando o CPF no banco 
-            $user = $user = User::where('cpf', $request->cpf)->first();
+        $cpf = preg_replace('/\D/', '', $request->cpf);
+        $user = User::where('cpf', $cpf)->first();
 
-            // se a variavel $user  for diferente de vazio 
-            if ($user){
-                // gerando uma senha aleatorio
-                $randomString = substr(str_shuffle($this->caracteres), 10, 15);
+        if ($user) {
+            $novaSenha = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 10);
 
-                $this->smsService->send($user->telefone, "Sua senha foi alterada para: {$randomString}");
+            $this->smsService->send($user->telefone, "Sua nova senha é: {$novaSenha}");
+            $user->update(['password' => Hash::make($novaSenha)]);
 
-                //criptografando a senha
-                $hashedPassword = Hash::make($randomString);
-                // update do da senha do usuario
-                $user->update([
-                    'password' => $hashedPassword
-                ]);
-
-                //retornando um sucesso para o front
-                return response()->json(['message'=> 'Senha alterada com sucesso'], 200);
-            }
-
-            return response()->json(['message'=> 'Não foi encon trado o usuario'], 400);
-
-        } catch (\Throwable $th) {
-
-            Log::error("erro não esperado no esqueciaSenha: ".$th->getMessage());
-            return response()->json(['error'=> 'erro legal'. $th], 500);
+            return response()->json([
+                'success' => true,
+                'message' => 'Senha redefinida e enviada por SMS!'
+            ], 200);
         }
-        
+
+        return response()->json([
+            'success' => false,
+            'message' => 'CPF não encontrado no sistema.'
+        ], 404);
+
+    } catch (\Throwable $th) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Erro interno no servidor.'
+        ], 500);
     }
+}
+
 }
