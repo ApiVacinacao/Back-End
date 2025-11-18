@@ -56,6 +56,24 @@ class UserController extends Controller
         }
     }
 
+    public function toggleStatus($id)
+    {
+        Gate::authorize('admin');
+
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['error' => 'Local não encontrado'], 404);
+        }
+
+        $user->status = !$user->status;
+        $user->save();
+
+        $user = auth()->user();
+        Log::info("Usuário {$user->id} alterou status do Local Atendimento {$user->id} para " . ($user->status ? 'Ativo' : 'Inativo'));
+
+        return response()->json($user, 200);
+    }
 
     public function create()
     {
