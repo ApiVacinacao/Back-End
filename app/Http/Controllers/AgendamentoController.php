@@ -42,24 +42,40 @@ class AgendamentoController extends Controller
 
     public function index()
     {
-        Gate::authorize('admin');
+        $user = auth()->user();
 
         try {
-            $agendamentos = Agendamento::with(['medico', 'local_atendimento', 'tipo_consulta'])->get();
+            // ADMIN → vê tudo
+            if ($user->role === 'admin') {
+                $agendamentos = Agendamento::with([
+                    'user:id,name',
+                    'medico',
+                    'local_atendimento',
+                    'tipo_consulta'
+                ])
+                    ->orderBy('data')
+                    ->get();
 
-            if ($agendamentos->isEmpty()) {
-                return response()->json(['message' => 'Nenhum agendamento encontrado.'], 200);
+                return response()->json($agendamentos, 200);
             }
 
-            $user = auth()->user();
-            Log::info("Usuário {$user->id} acessou a lista de agendamentos.");
+            // USER → vê só os dele
+            $agendamentos = Agendamento::with([
+                'user:id,name',
+                'medico',
+                'local_atendimento',
+                'tipo_consulta'
+            ])
+                ->where('user_id', $user->id)
+                ->orderBy('data')
+                ->get();
 
             return response()->json($agendamentos, 200);
         } catch (\Exception $e) {
-            Log::error('Erro ao buscar agendamentos: ' . $e->getMessage());
             return response()->json(['error' => 'Erro ao buscar agendamentos.'], 500);
         }
     }
+
 
     /**
      * Criar novo agendamento
@@ -117,20 +133,20 @@ class AgendamentoController extends Controller
             // // google calendar
             // $start = Carbon::parse("{$agendamento->data} {$agendamento->hora}");
             // $end = $start->copy()->addMinutes(30); // define 30min de duração, pode ajustar
-            
+
             // $googleEvent = new Event;
             // $googleEvent->name = "Consulta com Dr(a). {$agendamento->medico->nome}";
             // $googleEvent->description = "Tipo: {$agendamento->tipo_consulta->nome}\nLocal: {$agendamento->local_atendimento->nome}";
             // $googleEvent->startDateTime = $start;
             // $googleEvent->endDateTime = $end;
             // $googleEvent->save();
-            
+
             // // Armazenar o ID do evento no agendamento (adicione coluna `google_event_id` na tabela)
             // $agendamento->update(['google_event_id' => $googleEvent->id]);
-            
+
             //envio de mensagem
             Mail::to($user->email)->send(new AgendamentoEmail($user, $agendamento));
-        
+
             Log::info("Usuário {$user->id} criou o agendamento {$agendamento->id}.");
 
             return response()->json($agendamento, 201);
@@ -146,7 +162,7 @@ class AgendamentoController extends Controller
         Gate::authorize('admin');
 
         try {
-            $agendamento->status = !$agendamento->status;
+            $agendamento->status = !(bool)$agendamento->status;
             $agendamento->save();
 
             $user = auth()->user();
@@ -179,23 +195,19 @@ class AgendamentoController extends Controller
     {
         try {
             $user = auth()->user();
+
             $agendamentos = Agendamento::with(['medico', 'local_atendimento', 'tipo_consulta'])
                 ->where('user_id', $user->id)
                 ->get();
 
-            if ($agendamentos->isEmpty()) {
-                return response()->json(['message' => 'Nenhum agendamento encontrado.'], 200);
-            }
-
-            Log::info("Usuário {$user->id} visualizou seus agendamentos.");
             return response()->json($agendamentos, 200);
         } catch (\Exception $e) {
-            Log::error('Erro ao buscar agendamentos do usuário: ' . $e->getMessage());
             return response()->json(['error' => 'Erro ao buscar agendamentos.'], 500);
         }
     }
 
- /**
+
+    /**
      * @OA\Put(
      *     path="/api/agendamentos/{id}",
      *     summary="Atualiza um agendamento pelo ID",
@@ -253,7 +265,7 @@ class AgendamentoController extends Controller
                     $event->save();
                 }
             }
-            
+
             $user = auth()->user();
             Log::info("Usuário {$user->id} atualizou o agendamento {$agendamento->id}.");
 
@@ -301,10 +313,10 @@ class AgendamentoController extends Controller
                     $event->delete();
                 }
             }
-            
+
             $agendamento->delete();
             $user = auth()->user();
-        
+
 
             Log::info("Usuário {$user->id} deletou o agendamento {$agendamento->id}.");
             return response()->json(['message' => 'Agendamento deletado com sucesso.'], 200);
