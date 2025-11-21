@@ -12,8 +12,7 @@ class Agendamento extends Model
 
     protected $fillable = [
         'user_id',
-        'data',
-        'hora',
+        'dataHora',
         'medico_id',
         'local_atendimento_id',
         'tipo_consulta_id',
@@ -28,6 +27,7 @@ class Agendamento extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+        
     }
 
     public function local_atendimento()

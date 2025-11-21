@@ -17,8 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
 
             // Data e hora do agendamento
-            $table->date('data');
-            $table->time('hora');
+            $table->dateTime('dataHora');
             $table->boolean('status')->default(true);
 
             ##PARA Mysql

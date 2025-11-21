@@ -24,9 +24,17 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'email',
         'telefone',
-        'status',
         'role',
+        'status',
     ];
+
+    public function setPasswordAttribute($value)
+    {
+        if ($value) {
+            $this->attributes['password'] = bcrypt($value);
+        }
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -40,7 +48,7 @@ class User extends Authenticatable implements JWTSubject
         'updated_at',
     ];
 
-        public function getJWTIdentifier()
+    public function getJWTIdentifier()
     {
         return $this->getKey();
     }
@@ -49,5 +57,4 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
-
 }

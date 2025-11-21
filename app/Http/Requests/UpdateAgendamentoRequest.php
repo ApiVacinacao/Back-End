@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\DataHoraValida;
 use App\Rules\DataValida;
 use App\Rules\TimeValidate;
 use Illuminate\Foundation\Http\FormRequest;
@@ -27,8 +28,7 @@ class UpdateAgendamentoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'data' => ['sometimes','date',new DataValida],
-            'hora' => ['sometimes', new TimeValidate],
+            'dataHora' => ['sometimes','date',new DataHoraValida()],
             'user_id' => 'sometimes|exists:users,id',
             'medico_id' => 'sometimes|exists:medicos,id',
             'tipo_consulta_id' => 'sometimes|exists:tipo_consultas,id',

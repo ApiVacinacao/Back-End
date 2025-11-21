@@ -31,6 +31,7 @@ class MedicoController extends Controller
      */
     public function index()
     {
+        
         // Retorna todos os médicos com a especialidade relacionada
         $medicos = Medico::with('especialidade')->get();
 
