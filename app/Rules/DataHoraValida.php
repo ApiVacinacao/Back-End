@@ -6,7 +6,7 @@ use Closure;
 use DateTime;
 use Illuminate\Contracts\Validation\ValidationRule;
 
-class TimeValidate implements ValidationRule
+class DataHoraValida implements ValidationRule
 {
     /**
      * Run the validation rule.
@@ -15,13 +15,13 @@ class TimeValidate implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $hora = new DateTime();
-        $horaSistema = new DateTime($value);
+        //dd($value);
 
-        //dd($horaSistema, $hora);
+        $dataREpost = new DateTime($value);
+        $dateToday = new DateTime('now');
 
-        if($horaSistema->format('H:i:s') < $hora->format('H:i:s')){
-            $fail("não é possivel agendar uma consutla em horario retroativo");
-        }
+        if($dataREpost < $dateToday ){
+            $fail("A data é inferir a data a atual");
+        }  
     }
 }

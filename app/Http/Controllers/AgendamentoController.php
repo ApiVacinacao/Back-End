@@ -96,8 +96,7 @@ class AgendamentoController extends Controller
      *         required=true,
      *         @OA\JsonContent(
      *             required={"data", "hora", "medico_id", "local_atendimento_id", "tipo_consulta_id"},
-     *              @OA\Property(property="data", type="string", format="date", example="2025-12-31"),
-     *              @OA\Property(property="hora", type="string", format="time", example="14:30:00"),
+     *              @OA\Property(property="dataHora", type="string", format="date", example="2025-12-31 14:30:00"),
      *              @OA\Property(property="user_id", type="integer", example=1),
      *              @OA\Property(property="medico_id", type="integer", example=1),
      *              @OA\Property(property="local_atendimento_id", type="integer", example=1),
@@ -122,7 +121,7 @@ class AgendamentoController extends Controller
             $validated = $request->validated();
 
             // Verifica se já existe agendamento na mesma data e hora
-            if (Agendamento::where('data', $request->data)->where('hora', $request->hora)->exists()) {
+            if (Agendamento::where('dataHora', $request->dataHora)->exists()) {
                 return response()->json(['error' => 'Já existe um agendamento para essa data e hora.'], 409);
             }
 

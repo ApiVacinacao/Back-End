@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
-use DB;
+use App\Models\Agendamento;
+use DateTime;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,8 +17,7 @@ class AgendamentoSeeder extends Seeder
     {
         DB::table('agendamentos')->insert([
             'user_id' => 1,
-            'data' => '2025-09-16',
-            'hora' => '08:54:00',
+            'dataHora' => new DateTime('now'),
             'status' => true,
             'medico_id' => 1,
             'local_atendimento_id' => 1 ,
