@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\HasNumber;
+use App\Rules\HasSymbol;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -30,7 +32,7 @@ class StoreUsuerRequest extends FormRequest
             // (?=.*[\W_]) = exige pelo menos um caractere especial
             // (?=.*\d) = exige pelo menos um dígito
             'telefone' => 'required|string|min:11|max:14',
-            'password' => 'required|string|min:8|max:25|regex:/^(?=.*[\W_])(?=.*\d).+$/|confirmed',
+            'password' => ['required','string','min:8','max:25','confirmed',new HasNumber(), new HasSymbol()],
             'email' => 'required|email|unique:users',
             'status' => 'sometimes|boolean',
             'role' => 'sometimes|in:user,admin',
@@ -61,7 +63,7 @@ class StoreUsuerRequest extends FormRequest
             'password.min' => 'A senha deve ter no mínimo 8 caracteres.', #ok
             'password.max' => 'A senha deve ter no máximo 25 caracteres.', #
             'password.confirmed' => 'A confirmação da senha não corresponde.', #ok
-            'password.regex' => 'A senha deve conter pelo menos um caractere especial e um numero.', #ok
+
 
             'email.required' => 'O campo email é obrigatório.', #ok
             'email.email' => 'O email informado não é válido.', #ok
