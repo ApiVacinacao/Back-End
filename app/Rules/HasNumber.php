@@ -15,7 +15,7 @@ class HasNumber implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if (!preg_match('/[0-9]/', $value)) {
-            $fail('senha precisa contar um numero');
+            $fail('Senha precisa conter 1 número!');
         }
     }
 }

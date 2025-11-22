@@ -15,7 +15,7 @@ class HasSymbol implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if (!preg_match('/[\W_]/', $value)) {
-            $fail('senha precisa contar um simpolo');
+            $fail('Senha precisa conter 1 caracter especial! (ex: !@#$%)');
         }
     }
 }
