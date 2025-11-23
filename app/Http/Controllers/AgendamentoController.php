@@ -40,40 +40,27 @@ class AgendamentoController extends Controller
      * )
      */
 
-    public function index()
+    public function index(Request $request)
     {
         $user = auth()->user();
 
-        try {
-            // ADMIN → vê tudo
-            if ($user->role === 'admin') {
-                $agendamentos = Agendamento::with([
-                    'user:id,name',
-                    'medico',
-                    'local_atendimento',
-                    'tipo_consulta'
-                ])
-                    ->orderBy('data')
-                    ->get();
-
-                return response()->json($agendamentos, 200);
-            }
-
-            // USER → vê só os dele
-            $agendamentos = Agendamento::with([
-                'user:id,name',
+        // ADMIN → vê tudo
+        if ($user->role === 'admin') {
+            return Agendamento::with([
+                'user',
                 'medico',
                 'local_atendimento',
                 'tipo_consulta'
-            ])
-                ->where('user_id', $user->id)
-                ->orderBy('data')
-                ->get();
-
-            return response()->json($agendamentos, 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Erro ao buscar agendamentos.'], 500);
+            ])->get();
         }
+
+        // USER → só dele
+        return Agendamento::with([
+            'user',
+            'medico',
+            'local_atendimento',
+            'tipo_consulta'
+        ])->where('user_id', $user->id)->get();
     }
 
 
@@ -165,14 +152,18 @@ class AgendamentoController extends Controller
             $agendamento->save();
 
             $user = auth()->user();
-            Log::info("Usuário {$user->id} alterou status do agendamento {$agendamento->id} para " . ($agendamento->status ? 'ativo' : 'inativo'));
+            Log::info("Usuário {$user->id} alterou status do agendamento {$agendamento->id}");
 
-            return response()->json($agendamento, 200);
+            return response()->json([
+                'id' => $agendamento->id,
+                'status' => $agendamento->status
+            ], 200);
         } catch (\Exception $e) {
             Log::error('Erro ao alterar status do agendamento: ' . $e->getMessage());
             return response()->json(['error' => 'Erro ao alterar status do agendamento.'], 500);
         }
     }
+
 
     /**
      * @OA\Get(
