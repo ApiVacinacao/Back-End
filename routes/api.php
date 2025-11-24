@@ -24,6 +24,7 @@ Route::middleware([JwtMiddleware::class])->group(function () {
 
     Route::patch('agendamentos/{agendamento}/toggle-status', [AgendamentoController::class, 'toggleStatus']);
 
+
     Route::apiResource('agendamentos', AgendamentoController::class)->except(['show']);
     Route::get('meus_agendamentos', [AgendamentoController::class, 'show']);
 

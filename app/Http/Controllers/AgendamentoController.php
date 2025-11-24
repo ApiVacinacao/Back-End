@@ -232,6 +232,7 @@ class AgendamentoController extends Controller
      *     )
      * )
      */
+    
     public function update(UpdateAgendamentoRequest $request, Agendamento $agendamento)
     {
         Gate::authorize('admin');

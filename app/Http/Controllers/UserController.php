@@ -35,17 +35,17 @@ class UserController extends Controller
     public function index()
     {
         Gate::authorize('admin');
-    
+
         try {
             $dados = User::all();
-    
+
             if ($dados->isEmpty()) {
                 return response()->json(['message' => 'Nenhum usuário encontrado'], 404);
             }
-    
+
             $user = auth()->user();
             Log::info("O usuário {$user->id} listou todos os cadastros");
-    
+
             return response()->json($dados, 200);
         } catch (Exception $e) {
             Log::error('Erro ao listar os usuários: ' . $e->getMessage());
@@ -63,17 +63,22 @@ class UserController extends Controller
         $user = User::find($id);
 
         if (!$user) {
-            return response()->json(['error' => 'Local não encontrado'], 404);
+            return response()->json(['error' => 'Usuário não encontrado'], 404);
+        }
+
+        if ($user->id === auth()->id() && $user->status) {
+            return response()->json(['error' => 'Você não pode inativar seu próprio usuário'], 403);
         }
 
         $user->status = !$user->status;
         $user->save();
 
-        $user = auth()->user();
-        Log::info("Usuário {$user->id} alterou status do Local Atendimento {$user->id} para " . ($user->status ? 'Ativo' : 'Inativo'));
+        $admin = auth()->user();
+        Log::info("Usuário {$admin->id} alterou status do usuário {$user->id} para " . ($user->status ? 'Ativo' : 'Inativo'));
 
         return response()->json($user, 200);
     }
+
 
     public function create()
     {
@@ -109,7 +114,7 @@ class UserController extends Controller
     }
 
 
- /**
+    /**
      * @OA\Put(
      *     path="/api/users/{id}",
      *     summary="Atualizar os dados de um Usuario",
@@ -122,7 +127,7 @@ class UserController extends Controller
      *         description="ID do usuário",
      *         @OA\Schema(type="integer")
      *     ),
-    *     @OA\RequestBody(
+     *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
      *             required={"name", "cpf", "password", "password_confirmation", "telefone", "email" },
@@ -149,27 +154,27 @@ class UserController extends Controller
         Gate::authorize('admin');
 
         try {
-            if(Auth::id() === $user->id && !$request->status){
-                return response()->json(["voce não pode inativar o seu usario"],403);
+            if (Auth::id() === $user->id && !$request->status) {
+                return response()->json(["voce não pode inativar o seu usario"], 403);
             }
 
             $validated = $request->validated();
             $user->update($validated);
-    
+
             //Log::info("Usuário atualizado: {$user->id} por " . auth()->user()->id);
-    
+
             return response()->json($user, 200);
         } catch (Exception $e) {
             Log::error("Erro ao atualizar usuário: " . $e->getMessage());
-    
+
             return response()->json([
                 'message' => 'Erro ao atualizar usuário',
                 'error' => $e->getMessage()
             ], 500);
         }
     }
-    
-        /**
+
+    /**
      * @OA\Delete(
      *     path="/api/users/{id}",
      *     summary="Remover um usuario",
@@ -195,21 +200,20 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         Gate::authorize('admin');
-    
+
         try {
             $user->delete();
-    
+
             //Log::info("Usuário deletado: {$user->id} por " . auth()->user()->id);
-    
+
             return response()->json(['message' => 'Usuário deletado com sucesso'], 200);
         } catch (Exception $e) {
             Log::error("Erro ao deletar usuário: " . $e->getMessage());
-    
+
             return response()->json([
                 'message' => 'Erro ao deletar usuário',
                 'error' => $e->getMessage()
             ], 500);
         }
     }
-    
 }
