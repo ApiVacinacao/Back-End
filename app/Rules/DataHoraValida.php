@@ -21,7 +21,7 @@ class DataHoraValida implements ValidationRule
         $dateToday = new DateTime('now');
 
         if($dataREpost < $dateToday ){
-            $fail("A data é inferir a data a atual");
+            $fail("A data é inferior a data a atual!");
         }  
     }
 }
