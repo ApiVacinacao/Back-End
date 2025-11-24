@@ -25,13 +25,13 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|string|min:5|max:255|regex:/\s/',
-            'cpf' => 'sometimes|min:11|max:11|unique:users,cpf',
+            'cpf' => 'sometimes|min:11|max:11',
             // no regex
             // (?=.*[\W_]) = exige pelo menos um caractere especial
             // (?=.*\d) = exige pelo menos um dígito
             'telefone' => 'sometimes|string|min:11|max:14',
             'password' => 'sometimes|string|min:8|max:25|regex:/^(?=.*[\W_])(?=.*\d).+$/|confirmed',
-            'email' => 'sometimes|email|unique:users',
+            'email' => 'sometimes|email',
             'status' => 'sometimes|boolean',
             'role' => 'sometimes|in:user,admin',
         ];
