@@ -26,7 +26,7 @@ return new class extends Migration
             $table->foreign('medico_id')->references('id')->on('medicos')->onDelete('cascade');
 
             $table->foreignId('local_atendimento_id');
-            $table->foreign('local_atendimento_id')->references('id')->on('local_atendimentos')->onDelete('cascade');
+            $table->foreign('local_atendimento_id')->references('id')->on('local_atendimentos');
 
             $table->foreignId('tipo_consulta_id');
             $table->foreign('tipo_consulta_id')->references('id')->on('tipo_consultas')->onDelete('cascade');
