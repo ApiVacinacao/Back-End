@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\CpfValidated;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -25,7 +26,7 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|string|min:5|max:255|regex:/\s/',
-            'cpf' => 'sometimes|min:11|max:11',
+            'cpf' => ['sometimes','min:11','max:11', new CpfValidated()],
             // no regex
             // (?=.*[\W_]) = exige pelo menos um caractere especial
             // (?=.*\d) = exige pelo menos um dígito
