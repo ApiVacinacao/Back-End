@@ -50,15 +50,15 @@ class RelatorioController
         if($request->data_inicial && $request->data_final)
         {
 
-            $query->whereBetween('data',[$request->data_inicial,$request->data_final]);
+            $query->whereBetween('dataHora',[$request->data_inicial,$request->data_final]);
 
         }elseif ($request->data_inicial) {
 
-            $query->whereDate('data', $request->data_inicial);
+            $query->whereDate('dataHora', $request->data_inicial);
 
         }elseif ($request->data_final){
 
-            $query->whereDate('data', $request->data_final);
+            $query->whereDate('dataHora', $request->data_final);
         }
 
         if($request->medico_id)
