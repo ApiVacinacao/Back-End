@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\CpfValidated;
 use App\Rules\HasNumber;
 use App\Rules\HasSymbol;
 use Illuminate\Foundation\Http\FormRequest;
@@ -27,7 +28,7 @@ class StoreUsuerRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:5|max:255|regex:/\s/',
-            'cpf' => 'required|min:11|max:11|unique:users,cpf',
+            'cpf' => ['required','min:11','max:11','unique:users,cpf', new CpfValidated()],
             // no regex
             // (?=.*[\W_]) = exige pelo menos um caractere especial
             // (?=.*\d) = exige pelo menos um dígito
